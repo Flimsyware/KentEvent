@@ -1,16 +1,51 @@
 <!-- This is where the Google map will appear -->
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Register for KentEvent{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
-  </form>
+<h1>Register for KentEvent today!</h1>
+<div class = "loginModal">
+    <form method="post">
+      <label for="email">Email</label>
+      <input type="text"><br>
+      <label for="password">Password</label>
+      <input type="text"><br>
+      <label for="user">Choose a User Type: </label>
+      <input type="radio" name="user" value="user">User
+      <input type="radio" name="host" value="host">Host<br>
+      <input type="submit" value="Register">
+    </form>
+  </div>
+  <img src="https://cdn.discordapp.com/attachments/494316263972012044/564854145899823124/pinwithshadow.png">
+
+
+{% block style %}
+<style>
+body{
+  background:#FDFE8B;
+}
+
+h1{
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.loginModal{
+  display:block;
+  border-radius:25px;
+  height:500px;
+  width:500px;
+  background:red;
+  text-align: center;
+  margin:auto;
+}
+
+.post{
+  align-content: center;
+}
+
+.img{
+  margin-left:100px;
+}
+</style>
+{% endblock %}
 {% endblock %}

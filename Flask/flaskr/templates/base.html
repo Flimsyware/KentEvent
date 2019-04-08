@@ -7,13 +7,16 @@
       <span class="navbar-toggler-icon"></span>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link" href="/login">Login</a>
-          <a class="nav-item nav-link" href="/register">Register</a>
-          <a class="nav-item nav-link disabled" href="/events">KentEvent</a>
+          <a class="nav-item nav-link active" href="/"> Home <span class="sr-only"></span></a>
+          <a class="nav-item nav-link" href="/login"> Login</a>
+          <a class="nav-item nav-link" href="/register"> Register</a>
+          <a class="nav-item nav-link disabled" href="/events"> <img src="https://cdn.discordapp.com/attachments/494316263972012044/564851033189384192/KentEvent_logo.png" width="20" height="20" class="d-inline-block align-top" alt="">KentEvent</a>
         </div>
       </div>
     </nav>
+
 {% block content %}{% endblock %}
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+{% block script %}
+<script src="" ></script>
+{% endblock %}

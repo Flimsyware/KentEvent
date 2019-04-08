@@ -1,18 +1,66 @@
 <!-- This is where the Google map will appear -->
 {% extends 'base.html' %}
 
-<h1>Log In to KentEvent</h1>
-
-{% block header %}
-  <h1>{% block title %}Log In to KentEvent{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
+<h1>Welcome Back!</h1>
+<div class = "loginModal">
+  <div class = "title">
+    hello
+  </div>
+  <form>
+    <label for="email">Email</label>
+    <input type="text"><br>
     <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
+    <input type="text"><br>
+    <input type="submit" value="LogIn">
   </form>
+</div>
+{% block style %}
+<style>
+.title{
+background:none;
+display:block;
+border-radius:25px;
+height:140px;
+}
+
+form{
+  background:green;
+  margin:0 auto;
+}
+
+body{
+  background:#FDFE8B;
+}
+
+h1{
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.loginModal{
+  display:block;
+  height:500px;
+  width:500px;
+  background:red;
+  text-align: center;
+  margin:auto;
+  border-radius: 25px;
+}
+
+input[type=text], input[type=password] {
+    text-align:center;
+    display: block;
+    margin:auto;
+    width: 50%; 
+    padding: 10px;
+    background:purple;
+
+}
+label{
+  margin: auto;
+}
+
+</style>
+{% endblock %}
 {% endblock %}
