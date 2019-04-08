@@ -27,8 +27,6 @@ def create_app(test_config=None):
     DBQuery = DBQueryHelper(DB)
     ##############################################
 
- 
-
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
@@ -47,7 +45,6 @@ def create_app(test_config=None):
     # Landing page
     @app.route('/')
     def Landing():
-        print(UserDB.dbEmail)
         return render_template("landing.html")
 
     #Login page 

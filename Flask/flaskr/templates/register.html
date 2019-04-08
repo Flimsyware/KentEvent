@@ -2,12 +2,89 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Send register = {{stringy}}</h1>
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="email" id="email" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
-  </form>
+<img src= "https://cdn.discordapp.com/attachments/494316263972012044/564906535327760439/register.png" class="registerTitle">
+
+<div class = "loginModal">
+    <div class = "title">
+    
+      </div>
+    <form method="post">
+      <label for="email">Email</label>
+      <input type="text" name = "email"><br>
+      <label for="password">Password</label>
+      <input type="text" name = "password"><br>
+      <label for="user">Choose a User Type: </label>
+      <input type="radio" name="user" value="user">User
+      <input type="radio" name="host" value="host">Host<br>
+      <input type="submit" value="Register">
+    </form>
+    <!--<form method="post">
+      <label for="username">Username</label>
+      <input name="email" id="email" required>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+      <input type="submit" value="Log In">
+    </form>-->
+  </div>
+  
+{% block style %}
+<style>
+
+.title{
+background:none;
+display:block;
+border-radius:25px;
+height:140px;
+}
+
+input[type=text], input[type=password] {
+    text-align:center;
+    display: block;
+    margin:auto;
+    width: 50%; 
+    padding: 10px;
+    background:purple;
+
+}
+
+input[type=submit]{
+background:#FFFF8B;
+}
+
+.registerTitle{
+  display:block;
+  margin-top:auto;
+  margin-left:auto;
+  margin-right:auto;
+  margin-bottom:50px;
+}
+
+body{
+  background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/564898563696361509/background.png");
+}
+
+h1{
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.loginModal{
+  display:block;
+  border-radius:25px;
+  height:500px;
+  width:500px;
+  background:#5CB9DD;
+  text-align: center;
+  margin:auto;
+}
+
+.post{
+  align-content: center;
+}
+
+.img{
+  margin-left:100px;
+}
+</style>
+{% endblock %}
 {% endblock %}

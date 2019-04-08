@@ -1,26 +1,29 @@
 {% extends "bootstrap/base.html" %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <h1>Kent Event</h1>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/login">Login</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/register">Register</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/events">KentEvent</a>
-      </li>
-    </ul>
-  </div>
-</nav>
 
-{% block content %}{% endblock %} 
+{% block navbar %}
+
+  <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Flimsyware</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/">Home</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+
+          <li><a href="/register">Sign Up</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/events">KentEvent</a></li>
+        </ul>
+      </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block script %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+{% endblock %}
