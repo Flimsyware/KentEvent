@@ -2,10 +2,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Welcome Back!</h1>
+<img src="https://cdn.discordapp.com/attachments/494316263972012044/564918483704348683/welcomeBack.png" class="loginTitle">
 <div class = "loginModal">
   <div class = "title">
-    hello
+    
   </div>
   <form>
     <label for="email">Email</label>
@@ -15,8 +15,21 @@
     <input type="submit" value="LogIn">
   </form>
 </div>
+
+{%block script %}
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
 {% block style %}
 <style>
+
+.loginTitle{
+  display:block;
+  margin-top:auto;
+  margin-left:auto;
+  margin-right:auto;
+  margin-bottom:50px;
+}
+
 .title{
 background:none;
 display:block;
@@ -24,25 +37,21 @@ border-radius:25px;
 height:140px;
 }
 
-form{
-  background:green;
-  margin:0 auto;
-}
-
 body{
-  background:#FDFE8B;
+  background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/564898563696361509/background.png");
 }
 
 h1{
   text-align: center;
   margin-bottom: 50px;
+  font-family:Roboto;
 }
 
 .loginModal{
   display:block;
   height:500px;
   width:500px;
-  background:red;
+  background:#5CB9DD;
   text-align: center;
   margin:auto;
   border-radius: 25px;
@@ -57,10 +66,12 @@ input[type=text], input[type=password] {
     background:purple;
 
 }
+
 label{
   margin: auto;
 }
 
 </style>
+{% endblock %}
 {% endblock %}
 {% endblock %}

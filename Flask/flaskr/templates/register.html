@@ -2,8 +2,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Register for KentEvent today!</h1>
+<img src= "https://cdn.discordapp.com/attachments/494316263972012044/564906535327760439/register.png" class="registerTitle">
+
 <div class = "loginModal">
+    <div class = "title">
+    
+      </div>
     <form method="post">
       <label for="email">Email</label>
       <input type="text"><br>
@@ -15,13 +19,41 @@
       <input type="submit" value="Register">
     </form>
   </div>
-  <img src="https://cdn.discordapp.com/attachments/494316263972012044/564854145899823124/pinwithshadow.png">
-
-
+  
 {% block style %}
 <style>
+
+.title{
+background:none;
+display:block;
+border-radius:25px;
+height:140px;
+}
+
+input[type=text], input[type=password] {
+    text-align:center;
+    display: block;
+    margin:auto;
+    width: 50%; 
+    padding: 10px;
+    background:purple;
+
+}
+
+input[type=submit]{
+background:#FFFF8B;
+}
+
+.registerTitle{
+  display:block;
+  margin-top:auto;
+  margin-left:auto;
+  margin-right:auto;
+  margin-bottom:50px;
+}
+
 body{
-  background:#FDFE8B;
+  background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/564898563696361509/background.png");
 }
 
 h1{
@@ -34,7 +66,7 @@ h1{
   border-radius:25px;
   height:500px;
   width:500px;
-  background:red;
+  background:#5CB9DD;
   text-align: center;
   margin:auto;
 }
