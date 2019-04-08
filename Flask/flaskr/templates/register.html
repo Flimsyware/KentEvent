@@ -10,14 +10,21 @@
       </div>
     <form method="post">
       <label for="email">Email</label>
-      <input type="text"><br>
+      <input type="text" name = "email"><br>
       <label for="password">Password</label>
-      <input type="text"><br>
+      <input type="text" name = "password"><br>
       <label for="user">Choose a User Type: </label>
       <input type="radio" name="user" value="user">User
       <input type="radio" name="host" value="host">Host<br>
       <input type="submit" value="Register">
     </form>
+    <!--<form method="post">
+      <label for="username">Username</label>
+      <input name="email" id="email" required>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+      <input type="submit" value="Log In">
+    </form>-->
   </div>
   
 {% block style %}
