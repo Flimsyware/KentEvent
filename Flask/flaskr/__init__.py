@@ -1,10 +1,11 @@
 import os
-
 from flask import Flask , render_template, request
 from flask_bootstrap import Bootstrap
-from flaskr import db
+from flaskr.db import DBQueryHelper,DB
+from flaskr.DatabaseClasses.UserDB import UserDB
+from flask_sqlalchemy  import SQLAlchemy
+import sshtunnel
 
-database = None
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -13,11 +14,20 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
-    #Create database 
-    database = db.database(app)
-    #for i in database.Query():
-        #print(i['Name'])
+    ############################################
+    #Creating database session
+    tunnel = sshtunnel.SSHTunnelForwarder(
+        ('ssh.pythonanywhere.com'), ssh_username="flimsyware",ssh_password="flimsythefish",
+        remote_bind_address=('flimsyware.mysql.pythonanywhere-services.com',3306)
+    )
+    tunnel.start()
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flimsyware:flimsydatabase@127.0.0.1:{}/flimsyware$default'.format(tunnel.local_bind_port)
+    DB = SQLAlchemy(app)
+    
+    DBQuery = DBQueryHelper(DB)
+    ##############################################
 
+ 
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -37,6 +47,7 @@ def create_app(test_config=None):
     # Landing page
     @app.route('/')
     def Landing():
+        print(UserDB.dbEmail)
         return render_template("landing.html")
 
     #Login page 
@@ -44,7 +55,10 @@ def create_app(test_config=None):
     def Login():
         if request.method == "POST":
             print("Post Login")
-            loggedIn = database.CheckIfUserInDB(str(request.form['username']),str(request.form['password']))
+            newUser = UserDB()
+            newUser.email = str(request.form['email'])
+            newUser.password = str(request.form['password'])
+            loggedIn = DBQuery.Login(newUser)
             if loggedIn == True:
                 return render_template("events.html")
 
@@ -56,11 +70,11 @@ def create_app(test_config=None):
         stringy = "false"
         if request.method == "POST":
             stringy = "true"
-            result = database.AddUser(str(request.form['username']),str(request.form['password']))
-            if result != None:
-                for i in result:
-                    for j in i:
-                        print(j)
+            newUser = UserDB()
+            newUser.email = str(request.form['email'])
+            newUser.password = str(request.form['password'])
+            #newUser.role = str(request.form['role']
+            result = DBQuery.AddUser(newUser)
 
             print("POST REGISTER")
             return render_template("register.html",stringy = stringy)
