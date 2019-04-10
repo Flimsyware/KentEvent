@@ -6,8 +6,10 @@
 <img src= "https://cdn.discordapp.com/attachments/494316263972012044/564848633350979589/kenteventTitle2.png" alt="title" class="titlePic">
 <div class = "wrap">
 <div class = "column">
-    <h3><img src="https://cdn.discordapp.com/attachments/494316263972012044/564846685864329237/pins.png" width="15" height="20" class="d-inline-block align-top" alt=""> <b>Meet the Team!</b></h3>
-    <p><b>We are Flimsyware! I company comprised of 14 Computer Science students at Kent State University. Our vision is to to unite the campus and help students find their passion. We created KentEvent to bring people closer together and open them up to new safe events on the Kent State Campus.</b></p>
+    <div class = "background">
+      <h3><img src="https://cdn.discordapp.com/attachments/494316263972012044/564846685864329237/pins.png" width="15" height="20" class="d-inline-block align-top" alt=""> <b>Meet the Team!</b></h3>
+      <p><b>We are Flimsyware! I company comprised of 14 Computer Science students at Kent State University. Our vision is to to unite the campus and help students find their passion. We created KentEvent to bring people closer together and open them up to new safe events on the Kent State Campus.</b></p>
+    </div>
 </div>
 
 <div class = "column">
@@ -28,8 +30,11 @@
  body{
      /*background:#FFFF8B;*/
      background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/564898563696361509/background.png");
-    }
+ }
 
+ .background{
+    z-index:1000;
+ }
 
  .titlePic{
   display: block;
@@ -46,12 +51,22 @@
     width: 100%; 
     table-layout: fixed; 
     border-spacing: 20px; 
-    }
+ }
  
  .column{   
     display: table-cell; 
+    border-radius: 25px;
+    border:solid black;
     font-family:Roboto;
     font-size: 20px;
+    background:#FFFF8B;
+    /*filter:blur(5px);*/
+
+    z-index:-1;
+ }
+
+ p{
+     padding:10px;
  }
  </style>
  {% endblock %}
