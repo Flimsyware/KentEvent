@@ -68,9 +68,10 @@ def create_app(test_config=None):
         if request.method == "POST":
             stringy = "true"
             newUser = UserDB()
-            newUser.email = str(request.form['email'])
+            newUser.SetEmail(str(request.form['email']))
             newUser.password = str(request.form['password'])
-            #newUser.role = str(request.form['role']
+            newUser.role = str(request.form['userType'])
+            print(newUser.role)
             result = DBQuery.AddUser(newUser)
             print(result)
             if result == DBQuery.REGISTRATION_SUCCESS:

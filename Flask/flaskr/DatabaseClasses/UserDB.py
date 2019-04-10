@@ -12,7 +12,7 @@ class UserDB:
         self.password = None
         self.role = "User"
 
-    def SetEmail(inEmail):
+    def SetEmail(self, inEmail):
         #Check if it is string and formatted to be an email
         #from deloziers example of formatting or something
         self.email = inEmail
