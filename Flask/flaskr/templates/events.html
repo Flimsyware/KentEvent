@@ -1,7 +1,4 @@
-<!-- This is where the Google map will appear -->
 {% extends "bootstrap/base.html" %}
-
-<!-- Issue if you try to implement the nav bar -->
 
 <!-- Setup doc -->
 {% block html_attribs %} lang="en" class="h-100" {% endblock %}
@@ -29,9 +26,11 @@
 {% block scripts %}
 
 <script>
+
     // Setup Google Map
     function initMap() {
         var uluru = { lat: 41.1411794353, lng: -81.3383786465 };
+        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
         var marker;
         var map = new google.maps.Map(
             document.getElementById('map'), {
@@ -39,6 +38,16 @@
                 center: uluru,
                 disableDefaultUI: true
             });
+        
+        //blue icon http://i68.tinypic.com/2wojejb.png
+        //red icon http://i63.tinypic.com/242aqh3.png
+        //green icon http://i66.tinypic.com/14u84ci.png
+
+        //service icon http://i66.tinypic.com/2wpo45i.png
+        //educational icon http://i66.tinypic.com/2hqt0fp.png
+        //culture icon http://i63.tinypic.com/29e6j46.png
+        //media icon http://i64.tinypic.com/2quunf4.png
+
 
         // Center map on user's location
         if (navigator.geolocation) {
@@ -47,17 +56,19 @@
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                marker = new google.maps.Marker({
+                var marker = new google.maps.Marker({
                     position: pos,
                     map: map,
-                    title: 'Your Location'
+                    title: 'Your guy',
+                    icon: "http://i63.tinypic.com/29e6j46.png",
                 });
                 marker.addListener('click', function () {
                     $('.collapse').toggle();
+                    //marker.setIcon(icons.sample1.icon);
                 });
                 infoWindow = new google.maps.InfoWindow;
-
                 map.setCenter(pos);
+                
             }, function () {
                 handleLocationError(true, infoWindow, map.getCenter());
             });
