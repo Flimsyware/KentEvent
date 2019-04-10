@@ -14,11 +14,15 @@ class EventDB:
     dbRoomNumber = "RoomNumber"
     
     def __init__(self):
-        self.email = None
-        self.password = None
-        self.role = "User"
+        self.ID = None
+        self.universityID = None
+        self.creatorID = None
+        self.description = None
+        self.startTIme = None
+        self.endTime = None
+        self.date = None
+        self.creationDate = None
+        self.creationTime = None
+        self.cost = None
+        self.roomNumber = None
 
-    def SetEmail(inEmail):
-        #Check if it is string and formatted to be an email
-        #from deloziers example of formatting or something
-        self.email = inEmail
