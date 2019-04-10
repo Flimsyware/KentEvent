@@ -72,10 +72,17 @@ def create_app(test_config=None):
             newUser.password = str(request.form['password'])
             #newUser.role = str(request.form['role']
             result = DBQuery.AddUser(newUser)
+            print(result)
+            if result == DBQuery.REGISTRATION_SUCCESS:
+                
+                #called when registration is a success.
+                return render_template("register.html",registrationCheck = result)
+            else:
+                #called when registration was a failure.
+                return render_template("register.html",registrationCheck = result)
 
-            print("POST REGISTER")
-            return render_template("register.html",stringy = stringy)
-        return render_template("register.html",stringy = stringy)
+        #called when first get on the page
+        return render_template("register.html")
 
     #Profile for creator 
     @app.route('/creator')

@@ -8,14 +8,15 @@
     <div class = "title">
     
       </div>
+    <p>{{ registrationCheck }}</p>
     <form method="post">
       <label for="email">Email</label>
       <input type="text" name = "email"><br>
       <label for="password">Password</label>
       <input type="text" name = "password"><br>
       <label for="user">Choose a User Type: </label>
-      <input type="radio" name="user" value="user">User
-      <input type="radio" name="host" value="host">Host<br>
+      <input type="radio" name="userType" value="user"><b>User</b>
+      <input type="radio" name="userType" value="host"><b>Host</b><br>
       <input class="btn btn-primary" type="submit" value="Register">
     </form>
     <!--<form method="post">
