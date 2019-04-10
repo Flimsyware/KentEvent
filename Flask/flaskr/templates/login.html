@@ -1,16 +1,92 @@
 <!-- This is where the Google map will appear -->
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Log In to KentEvent{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Log In">
+<img src="https://cdn.discordapp.com/attachments/494316263972012044/564918483704348683/welcomeBack.png" class="loginTitle">
+<div class = "loginModal">
+  <div class = "title">
+    
+  </div>
+  <form method = "POST" class="text-center">
+    <label for="email">Email:</label>
+    <input type="text" name = "email"><br>
+    <label for="password">Password:</label>
+    <input type="text" name = "password"><br>
+    <input class="btn btn-primary" type="submit" value="Submit">
   </form>
+  <img src ="https://cdn.discordapp.com/attachments/494316263972012044/565287681475477515/yellowpin.png" class="pin">
+</div>
+
+{%block script %}
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+{% block style %}
+<style>
+
+
+.loginTitle{
+  display:block;
+  margin-top:auto;
+  margin-left:auto;
+  margin-right:auto;
+  margin-bottom:50px;
+}
+
+.title{
+background:none;
+display:block;
+border-radius:25px;
+height:120px;
+}
+
+body{
+  background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/564898563696361509/background.png");
+}
+
+h1{
+  text-align: center;
+  margin-bottom: 50px;
+  font-family:Roboto;
+}
+
+.loginModal{
+  display:block;
+  height:500px;
+  width:500px;
+  background:#5CB9DD;
+  text-align: center;
+  margin:auto;
+  border-radius: 25px;
+  border:solid black;
+}
+
+input[type=submit]{
+background:#FFFF8B;
+color:black;
+
+}
+
+input[type=text], input[type=password] {
+    text-align:center;
+    display: block;
+    margin:auto;
+    width: 50%; 
+    padding: 10px;
+    background:#FAF6C3;
+
+}
+
+label{
+  font-family:Roboto;
+  font-size:20px;
+}
+
+.pin{
+  margin-right:300px;
+  margin-top:5px;
+
+}
+</style>
+{% endblock %}
+{% endblock %}
 {% endblock %}

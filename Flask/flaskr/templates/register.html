@@ -1,16 +1,104 @@
 <!-- This is where the Google map will appear -->
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Register for KentEvent{% endblock %}</h1>
-{% endblock %}
-
 {% block content %}
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
-    <input type="submit" value="Register">
-  </form>
+<img src= "https://cdn.discordapp.com/attachments/494316263972012044/564906535327760439/register.png" class="registerTitle">
+
+<div class = "loginModal">
+    <div class = "title">
+    
+      </div>
+    <p>{{ registrationCheck }}</p>
+    <form method="post">
+      <label for="email">Email</label>
+      <input type="text" name = "email"><br>
+      <label for="password">Password</label>
+      <input type="text" name = "password"><br>
+      <label for="user">Choose a User Type: </label>
+      <input type="radio" name="userType" value="user"><b>User</b>
+      <input type="radio" name="userType" value="host"><b>Host</b><br>
+      <input class="btn btn-primary" type="submit" value="Register">
+    </form>
+    <!--<form method="post">
+      <label for="username">Username</label>
+      <input name="email" id="email" required>
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" required>
+      <input type="submit" value="Log In">
+    </form>-->
+    <img src ="https://cdn.discordapp.com/attachments/494316263972012044/564854145899823124/pinwithshadow.png" class="pin">
+
+  </div>
+  
+{% block style %}
+<style>
+
+label{
+  font-family:Roboto;
+  font-size:20px;
+}
+
+.title{
+background:none;
+display:block;
+border-radius:25px;
+height:90px;
+}
+
+input[type=text], input[type=password] {
+    text-align:center;
+    display: block;
+    margin:auto;
+    width: 50%; 
+    padding: 10px;
+
+}
+
+input[type=submit]{
+background:#5CB9DD;
+color:black;
+}
+
+.registerTitle{
+  display:block;
+  margin-top:auto;
+  margin-left:auto;
+  margin-right:auto;
+  margin-bottom:50px;
+}
+
+body{
+  background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/564898563696361509/background.png");
+}
+
+h1{
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.loginModal{
+  display:block;
+  border-radius:25px;
+  height:500px;
+  width:500px;
+  background:#FFFF8B;
+  text-align: center;
+  margin:auto;
+  border:solid black;
+}
+
+.post{
+  align-content: center;
+}
+
+.img{
+  margin-left:100px;
+}
+
+.pin{
+  margin-right:300px;
+  
+}
+</style>
+{% endblock %}
 {% endblock %}
