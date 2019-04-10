@@ -5,9 +5,16 @@
 from flask_sqlalchemy  import SQLAlchemy
 DB = SQLAlchemy()
 
+
+
 class DBQueryHelper:
+	DUPLICATE_EMAIL_ERROR = "Duplicate email error for registration."
+	REGISTRATION_SUCCESS = "Registration was a success."
+	LOGIN_SUCCESS = "Login was successful."
+	LOGIN_FAILED = "Login was not successful."
 	def __init__(self, db):
 		self.DB=db
+		
 
 	#TODO: This needs to be modular and not just query one thing
 	#---Should have array of select, the table name, array for where and the array for values simple
@@ -16,31 +23,20 @@ class DBQueryHelper:
 		return self.DB.engine.execute("SELECT * FROM University WHERE Name = \"Akron\";")
 
 	def AddUser(self,userDB):
-		if issubclass(type(userDB.email), str) == False:
-			print("email not type of str.")
-			return None
-			
-		if issubclass(type(userDB.password), str) == False:
-			print("password not type of str.")
-			return None
+		checkIfCanRegisterQuery = "Select Email from User where Email = " + "\"" + userDB.email + "\";"
+		rows = self.DB.engine.execute(checkIfCanRegisterQuery).fetchall()
 
-		if issubclass(type(userDB.role), str) == False:
-			print("Role not type of str.")
-			return None
+		if len(rows) > 0:
+			return self.DUPLICATE_EMAIL_ERROR
 
 		queryText = "INSERT INTO User (Email,Password,Role) "\
 			"values (\"" + userDB.email + "\",\"" + userDB.password + "\",\"" + userDB.role + "\");"
-		result = self.DB.engine.execute(queryText)
+		self.DB.engine.execute(queryText)
+
+		return self.REGISTRATION_SUCCESS
 
 	def Login(self, userDB):
-		if issubclass(type(userDB.email), str) == False:
-			print("email not type of str.")
-			return False
 		
-		if issubclass(type(userDB.password), str) == False:
-			print("password not type of str.")
-			return False
-
 		queryText = "select * from User where (Email,Password) = (\"" + userDB.email + "\",\"" + userDB.password + "\");"
 		result = self.DB.engine.execute(queryText)
 		rows = result.fetchall()
