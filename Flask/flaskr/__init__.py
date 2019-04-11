@@ -1,10 +1,9 @@
 import os
 from flask import Flask , render_template, request
 from flask_bootstrap import Bootstrap
-from flaskr.db import DBQueryHelper,DB
-from flaskr.DatabaseClasses.UserDB import UserDB
-from flask_sqlalchemy  import SQLAlchemy
-import sshtunnel
+from flaskr.db import DBHelper
+from flaskr.Database.UserDB import UserDB
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -14,18 +13,8 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
-    ############################################
-    #Creating database session
-    tunnel = sshtunnel.SSHTunnelForwarder(
-        ('ssh.pythonanywhere.com'), ssh_username="flimsyware",ssh_password="flimsythefish",
-        remote_bind_address=('flimsyware.mysql.pythonanywhere-services.com',3306)
-    )
-    tunnel.start()
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flimsyware:flimsydatabase@127.0.0.1:{}/flimsyware$default'.format(tunnel.local_bind_port)
-    DB = SQLAlchemy(app)
-    
-    DBQuery = DBQueryHelper(DB)
-    ##############################################
+    #Database
+    dbHelper = DBHelper()
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -50,32 +39,25 @@ def create_app(test_config=None):
     #Login page 
     @app.route('/login', methods=['GET', 'POST'])
     def Login():
+        #POST
         if request.method == "POST":
             print("Post Login")
-            newUser = UserDB()
-            newUser.email = str(request.form['email'])
-            newUser.password = str(request.form['password'])
-            loggedIn = DBQuery.Login(newUser)
-            if loggedIn == True:
+            result = dbHelper.Login(str(request.form['email']),str(request.form['password']))
+            if result == DBHelper.LOGIN_SUCCESS:
                 return render_template("events.html")
+            else:
+                return render_template("login.html",loginCheck =result)
 
         return render_template("login.html")
 
     #Registration page 
     @app.route('/register', methods=['GET', 'POST'])
     def Register():
-        stringy = "false"
         if request.method == "POST":
-            stringy = "true"
-            newUser = UserDB()
-            newUser.SetEmail(str(request.form['email']))
-            newUser.password = str(request.form['password'])
-            newUser.role = str(request.form['userType'])
-            print(newUser.role)
-            result = DBQuery.AddUser(newUser)
+            newUser = UserDB(str(request.form['email']),str(request.form['password']),str(request.form['userType']))
+            result = dbHelper.AddUser(newUser)
             print(result)
-            if result == DBQuery.REGISTRATION_SUCCESS:
-                
+            if result == dbHelper.REGISTRATION_SUCCESS:
                 #called when registration is a success.
                 return render_template("register.html",registrationCheck = result)
             else:

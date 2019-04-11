@@ -1,3 +1,23 @@
+CreateEventTableText = """
+    CREATE TABLE if not exists Event(
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        Name varchar(255) NOT NULL,
+        UniversityID int NOT NULL,
+        CreatorID int NOT NULL,
+        Description TEXT,
+        StartTime time NOT NULL,
+        EndTime time NOT NULL,
+        Date date NOT NULL,
+        CreationDate date NOT NULL,
+        CreationTime time NOT NULL,
+        Cost int,
+        RoomNumber int,
+        FOREIGN KEY (CreatorID) REFERENCES User(ID),
+        FOREIGN KEY (UniversityID) REFERENCES University(ID)
+    )
+"""
+
+
 class EventDB:
     #This is the actual name of the variables in the database table
     tableName = "Event"
