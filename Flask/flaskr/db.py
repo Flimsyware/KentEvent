@@ -1,55 +1,68 @@
-#https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient
-#pip install mysqlclient-1.4.2-cp37-cp37m-win32.whl
+import sqlite3
+from flaskr.Database.UniversityDB import UniversityDB,CreateUniversityTableText
+from flaskr.Database.UserDB import UserDB,CreateUserTableText
+from flaskr.Database.EventDB import EventDB,CreateEventTableText
 
-#https://kite.com/python/docs/sqlalchemy.engine.result.ResultProxy
-from flask_sqlalchemy  import SQLAlchemy
-DB = SQLAlchemy()
-
-
-
-class DBQueryHelper:
-	DUPLICATE_EMAIL_ERROR = "Duplicate email error for registration."
-	REGISTRATION_SUCCESS = "Registration was a success."
-	LOGIN_SUCCESS = "Login was successful."
-	LOGIN_FAILED = "Login was not successful."
-	def __init__(self, db):
-		self.DB=db
-		
-
-	#TODO: This needs to be modular and not just query one thing
-	#---Should have array of select, the table name, array for where and the array for values simple
-	#---the arrays must be ordered.
-	def Query(self):
-		return self.DB.engine.execute("SELECT * FROM University WHERE Name = \"Akron\";")
-
-	def AddUser(self,userDB):
-		checkIfCanRegisterQuery = "Select Email from User where Email = " + "\"" + userDB.email + "\";"
-		rows = self.DB.engine.execute(checkIfCanRegisterQuery).fetchall()
-
-		if len(rows) > 0:
-			return self.DUPLICATE_EMAIL_ERROR
-
-		queryText = "INSERT INTO User (Email,Password,Role) "\
-			"values (\"" + userDB.email + "\",\"" + userDB.password + "\",\"" + userDB.role + "\");"
-		self.DB.engine.execute(queryText)
-
-		return self.REGISTRATION_SUCCESS
-
-	def Login(self, userDB):
-		
-		queryText = "select * from User where (Email,Password) = (\"" + userDB.email + "\",\"" + userDB.password + "\");"
-		result = self.DB.engine.execute(queryText)
-		rows = result.fetchall()
-
-		for i in rows:
-			print(i)
-
-		if len(rows) > 0:
-			print("YES")
-			return True
-		else:
-			print("NO")
-			return False
+# conn = sqlite3.connect(':memory:')
 
 
-		
+class DBHelper:
+    def __init__(self):
+        self.conn = sqlite3.connect("database.db", check_same_thread=False)
+        self.c = self.conn.cursor()
+
+    def CreateTablesIfNotExists(self):
+        self.c.execute(CreateUniversityTableText)
+        self.c.execute(CreateUserTableText)
+        self.c.execute(CreateEventTableText)
+        self.conn.commit()
+
+
+    DUPLICATE_EMAIL_ERROR = "Duplicate email error for registration."
+    REGISTRATION_FIELDS_INCOMPLETE = "Registration fields were not complete."
+    REGISTRATION_SUCCESS = "Registration was a success."
+    LOGIN_SUCCESS = "Login was successful."
+    LOGIN_FAILED = "Login was not successful."	
+
+        #TODO: This needs to be modular and not just query one thing
+        #---Should have array of select, the table name, array for where and the array for values simple
+        #---the arrays must be ordered.
+    def Query(self):
+        print("nothing")
+
+    def AddUser(self,userDB):
+        if userDB.email == None:
+            return self.REGISTRATION_FIELDS_INCOMPLETE
+        if userDB.password == None:
+            return self.REGISTRATION_FIELDS_INCOMPLETE
+        if userDB.role == None:
+            return self.REGISTRATION_FIELDS_INCOMPLETE
+
+        self.c.execute("Select {} from {} where ({}) = (?);".format(UserDB.dbEmail,UserDB.tableName,UserDB.dbEmail),(userDB.email,))
+        rows = self.c.fetchall()
+        print(rows)
+
+        if len(rows) > 0:
+            return self.DUPLICATE_EMAIL_ERROR
+
+        self.c.execute("Insert into User ({},{},{}) values (?,?,?);".format(UserDB.dbEmail,UserDB.dbPassword,UserDB.dbRole),(userDB.email,userDB.password,userDB.role))
+        self.conn.commit()
+        return self.REGISTRATION_SUCCESS
+
+    def Login(self,email,password):
+        if email == None:
+            return self.LOGIN_FAILED
+        if password == None:
+            return self.LOGIN_FAILED
+
+
+        self.c.execute("Select * from {} where ({},{}) = (?,?);".format(UserDB.tableName,UserDB.dbEmail,UserDB.dbPassword),(email,password))
+        rows = self.c.fetchall()
+
+        if len(rows) > 0:
+            return self.LOGIN_SUCCESS
+        else:
+            return self.LOGIN_FAILED
+
+    def close_db(self):
+        self.conn.close()
