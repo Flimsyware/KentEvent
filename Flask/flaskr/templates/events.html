@@ -17,7 +17,17 @@
 <div class="row h-100 text-center">
     <!-- Sidebar -->
     <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#039BE5;">
-        <div class="col"><h3>Event Title</h3></div>
+        <div class="col"><h3>Event Title</h3>
+            <table>
+            <input type="radio" name="iconType" value="blue" style>Blue<br>
+            <input type="radio" name="iconType" value="red">Red<br>
+            <input type="radio" name="iconType" value="green">Green</br>
+            <input type="radio" name="iconType" value="service">Service<br>
+            <input type="radio" name="iconType" value="educational">Educational<br>
+            <input type="radio" name="iconType" value="culture">Culture</br>
+            <input type="radio" name="iconType" value="media">Media</br>
+            </table>
+        </div>
     </div>
     <!-- Map -->
     <div class="col" id="map"></div>
@@ -39,14 +49,7 @@
                 disableDefaultUI: true
             });
         
-        //blue icon http://i68.tinypic.com/2wojejb.png
-        //red icon http://i63.tinypic.com/242aqh3.png
-        //green icon http://i66.tinypic.com/14u84ci.png
-
-        //service icon http://i66.tinypic.com/2wpo45i.png
-        //educational icon http://i66.tinypic.com/2hqt0fp.png
-        //culture icon http://i63.tinypic.com/29e6j46.png
-        //media icon http://i64.tinypic.com/2quunf4.png
+        
 
 
         // Center map on user's location
@@ -60,12 +63,46 @@
                     position: pos,
                     map: map,
                     title: 'Your guy',
-                    icon: "http://i63.tinypic.com/29e6j46.png",
+                    icon: "http://i66.tinypic.com/2hqt0fp.png",
                 });
                 marker.addListener('click', function () {
                     $('.collapse').toggle();
-                    //marker.setIcon(icons.sample1.icon);
+                    //marker.setIcon("http://i68.tinypic.com/2wojejb.png");
                 });
+
+                //blue icon http://i68.tinypic.com/2wojejb.png
+                //red icon http://i63.tinypic.com/242aqh3.png
+                //green icon http://i66.tinypic.com/14u84ci.png
+
+                //service icon http://i66.tinypic.com/2wpo45i.png
+                //educational icon http://i66.tinypic.com/2hqt0fp.png
+                //culture icon http://i63.tinypic.com/29e6j46.png
+                //media icon http://i64.tinypic.com/2quunf4.png
+
+                $('input[type=radio][name=iconType]').change(function() {
+                    if (this.value == 'blue') {
+                        marker.setIcon("http://i68.tinypic.com/2wojejb.png");
+                    }
+                    else if (this.value == 'red') {
+                        marker.setIcon("http://i63.tinypic.com/242aqh3.png");
+                    }
+                    else if (this.value == 'green') {
+                        marker.setIcon("http://i66.tinypic.com/14u84ci.png");
+                    }
+                    else if (this.value == 'service') {
+                        marker.setIcon("http://i66.tinypic.com/2wpo45i.png");
+                    }
+                    else if (this.value == 'educational') {
+                        marker.setIcon("http://i66.tinypic.com/2hqt0fp.png");
+                    }
+                    else if (this.value == 'culture') {
+                        marker.setIcon("http://i63.tinypic.com/29e6j46.png");
+                    }
+                    else if (this.value == 'media') {
+                        marker.setIcon("http://i64.tinypic.com/2quunf4.png");
+                    }
+                });
+
                 infoWindow = new google.maps.InfoWindow;
                 map.setCenter(pos);
                 
