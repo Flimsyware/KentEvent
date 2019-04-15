@@ -20,7 +20,7 @@
         <div class="col" style="width:500px;"><h3>Kent Event</h3></div>
         <button id = "event" onclick="myFunction()">Create an Event</button>
         <div id="eventForm" style="display:none;">
-        <form>
+        <form id="inForm">
             <label>Event Name:</label>
             <input type="text" name = "Name"><br>
             <label>Description:</label>
@@ -48,6 +48,10 @@
 
 {% block style %}
 <style>
+label{
+margin-top:25px;
+}
+
 input[type=submit]{
 background:#5CB9DD;
 color:black;
@@ -66,6 +70,7 @@ color:black;
     background: #FFFF8B;
     display:block;
     width:200px;
+    height:550px;
     margin-left:30px;
     text-align:center;
 }
