@@ -2,7 +2,6 @@
   "ExpandedNodes": [
     "",
     "\\flaskr",
-    "\\flaskr\\instance",
     "\\flaskr\\static",
     "\\flaskr\\templates",
     "\\flaskr\\templates\\auth",
