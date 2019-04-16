@@ -16,6 +16,7 @@
 <!-- Main content of page -->
 <div class="row h-100 text-center">
     <!-- Sidebar -->
+
     <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#5CB9DD; width:500px;">
         <div class="col" style="width:500px;"><h3>Kent Event</h3></div>
         <button id = "event" onclick="myFunction()">Create an Event</button>
@@ -30,14 +31,15 @@
             <label>Time Range:</label>
             <input type="text" name = "Time"><br>
             <label>Pick an icon:</label>
-            <select name = "icon">
-                <img src="https://cdn.pixabay.com/photo/2018/10/30/16/06/water-lily-3784022__340.jpg">
-                <option value="one" style="background-image:url(https://cdn.pixabay.com/photo/2018/10/30/16/06/water-lily-3784022__340.jpg);"></option>
-                <option value="one" style="background-image:url(https://cdn.pixabay.com/photo/2018/10/30/16/06/water-lily-3784022__340.jpg);">Academic</option>
-                <option value="one" style="background-image:url(https://cdn.pixabay.com/photo/2018/10/30/16/06/water-lily-3784022__340.jpg);">Greek</option>
-                <option value="one" style="background-image:url(https://cdn.pixabay.com/photo/2018/10/30/16/06/water-lily-3784022__340.jpg);">Other</option>
-                <option value="one" style="background-image:url(https://cdn.pixabay.com/photo/2018/10/30/16/06/water-lily-3784022__340.jpg);"></option>
-            </select>
+           <table>
+            <input type="radio" name="iconType" value="blue" style>Blue<br>
+            <input type="radio" name="iconType" value="red">Red<br>
+            <input type="radio" name="iconType" value="green">Green</br>
+            <input type="radio" name="iconType" value="service">Service<br>
+            <input type="radio" name="iconType" value="educational">Educational<br>
+            <input type="radio" name="iconType" value="culture">Culture</br>
+            <input type="radio" name="iconType" value="media">Media</br>
+            </table>
             <input class="btn btn-primary" type="submit" value="Submit">
         </form>
         </div>
@@ -49,7 +51,7 @@
 {% block style %}
 <style>
 label{
-margin-top:25px;
+margin-top:15px;
 }
 
 input[type=submit]{
@@ -70,7 +72,7 @@ color:black;
     background: #FFFF8B;
     display:block;
     width:200px;
-    height:550px;
+    height:650px;
     margin-left:30px;
     text-align:center;
 }
@@ -101,14 +103,7 @@ input[type=text]{
                 disableDefaultUI: true
             });
         
-        //blue icon http://i68.tinypic.com/2wojejb.png
-        //red icon http://i63.tinypic.com/242aqh3.png
-        //green icon http://i66.tinypic.com/14u84ci.png
-
-        //service icon http://i66.tinypic.com/2wpo45i.png
-        //educational icon http://i66.tinypic.com/2hqt0fp.png
-        //culture icon http://i63.tinypic.com/29e6j46.png
-        //media icon http://i64.tinypic.com/2quunf4.png
+        
 
 
         // Center map on user's location
@@ -122,12 +117,46 @@ input[type=text]{
                     position: pos,
                     map: map,
                     title: 'Your guy',
-                    icon: "http://i63.tinypic.com/29e6j46.png",
+                    icon: "http://i66.tinypic.com/2hqt0fp.png",
                 });
                 marker.addListener('click', function () {
                     $('.collapse').toggle();
-                    //marker.setIcon(icons.sample1.icon);
+                    //marker.setIcon("http://i68.tinypic.com/2wojejb.png");
                 });
+
+                //blue icon http://i68.tinypic.com/2wojejb.png
+                //red icon http://i63.tinypic.com/242aqh3.png
+                //green icon http://i66.tinypic.com/14u84ci.png
+
+                //service icon http://i66.tinypic.com/2wpo45i.png
+                //educational icon http://i66.tinypic.com/2hqt0fp.png
+                //culture icon http://i63.tinypic.com/29e6j46.png
+                //media icon http://i64.tinypic.com/2quunf4.png
+
+                $('input[type=radio][name=iconType]').change(function() {
+                    if (this.value == 'blue') {
+                        marker.setIcon("http://i68.tinypic.com/2wojejb.png");
+                    }
+                    else if (this.value == 'red') {
+                        marker.setIcon("http://i63.tinypic.com/242aqh3.png");
+                    }
+                    else if (this.value == 'green') {
+                        marker.setIcon("http://i66.tinypic.com/14u84ci.png");
+                    }
+                    else if (this.value == 'service') {
+                        marker.setIcon("http://i66.tinypic.com/2wpo45i.png");
+                    }
+                    else if (this.value == 'educational') {
+                        marker.setIcon("http://i66.tinypic.com/2hqt0fp.png");
+                    }
+                    else if (this.value == 'culture') {
+                        marker.setIcon("http://i63.tinypic.com/29e6j46.png");
+                    }
+                    else if (this.value == 'media') {
+                        marker.setIcon("http://i64.tinypic.com/2quunf4.png");
+                    }
+                });
+
                 infoWindow = new google.maps.InfoWindow;
                 map.setCenter(pos);
                 
