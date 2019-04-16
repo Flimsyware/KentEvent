@@ -53,7 +53,7 @@ class DBHelper:
 
         #checks if inserted any where types and if not, query and return the select from
         if len(whereTypes) == 0:
-            print(selectText)
+            #print(selectText)
             self.c.execute(selectText + ';')
             return self.c.fetchall()
         
@@ -77,7 +77,7 @@ class DBHelper:
             selectText = selectText + ",?"
 
         selectText = selectText + ");"
-        print(selectText)
+        #print(selectText)
         self.c.execute(selectText,args)
 
         return self.c.fetchall()
