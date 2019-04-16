@@ -12,6 +12,7 @@ from flaskr.Database.EventDB import EventDB,CreateEventTableText
 class DBHelper:
     selectAll = "*"
     DUPLICATE_EMAIL_ERROR = "Duplicate email error for registration."
+    INVALID_EMAIL_ERROR = "Input is not an email."
     REGISTRATION_FIELDS_INCOMPLETE = "Registration fields were not complete."
     REGISTRATION_SUCCESS = "Registration was a success."
     LOGIN_SUCCESS = "Login was successful."
@@ -85,6 +86,8 @@ class DBHelper:
     def AddUser(self,userDB):
         if userDB.email == None:
             return self.REGISTRATION_FIELDS_INCOMPLETE
+        if userDB.validEmail == False:
+            return self.INVALID_EMAIL_ERROR
         if userDB.password == None:
             return self.REGISTRATION_FIELDS_INCOMPLETE
         if userDB.role == None:

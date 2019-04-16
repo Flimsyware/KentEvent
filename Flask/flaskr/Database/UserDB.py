@@ -1,3 +1,5 @@
+from validate_email import validate_email
+
 CreateUserTableText = """
     CREATE table if not exists User(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,9 +38,17 @@ class UserDB:
         #Check if it is string and formatted to be an email
         #from deloziers example of formatting or something
         if inEmail == None or inEmail == "":
-            
             return False
 
+        isValid = validate_email(inEmail)
+        print(validate_email)
+        if isValid:
+            print("is valid")
+            self.validEmail = True
+        else:
+            print("is not valid")
+            self.validEmail = False
+        
         self.email = inEmail
         return True
 
