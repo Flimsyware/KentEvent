@@ -1,7 +1,9 @@
 import sqlite3
+from flask import session
 from flaskr.Database.UniversityDB import UniversityDB,CreateUniversityTableText
 from flaskr.Database.UserDB import UserDB,CreateUserTableText
 from flaskr.Database.EventDB import EventDB,CreateEventTableText
+from flaskr.SessionGlobals import *
 
 # conn = sqlite3.connect(':memory:')
 
@@ -112,11 +114,15 @@ class DBHelper:
 
 
         #self.c.execute("Select * from {} where ({},{}) = (?,?);".format(UserDB.tableName,UserDB.dbEmail,UserDB.dbPassword),(email,password))
-        rows = self.__SelectQuery__([self.selectAll],UserDB.tableName,[UserDB.dbEmail,UserDB.dbPassword],[email,password])
+        rows = self.__SelectQuery__([UserDB.dbID,UserDB.dbRoleEnumName],UserDB.tableName,[UserDB.dbEmail,UserDB.dbPassword],[email,password])
 
         if len(rows) > 0:
+            session[SessLoggedIn] = True
+            session[SessUserID] = rows[0][0]
+            session[SessUserType] = rows[0][1]
             return self.LOGIN_SUCCESS
         else:
+            session['logged_in'] = False
             return self.LOGIN_FAILED
 
     def close_db(self):

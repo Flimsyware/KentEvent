@@ -4,6 +4,7 @@ CreateEventTableText = """
         Name varchar(255) NOT NULL,
         UniversityID int NOT NULL,
         CreatorID int NOT NULL,
+        Address TEXT NOT NULL,
         Description TEXT,
         StartTime time NOT NULL,
         EndTime time NOT NULL,

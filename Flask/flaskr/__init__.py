@@ -1,9 +1,9 @@
 import os
-from flask import Flask , render_template, request
+from flask import Flask , render_template, request,session,redirect
 from flask_bootstrap import Bootstrap
 from flaskr.db import DBHelper
 from flaskr.Database.UserDB import UserDB
-
+from flaskr.SessionGlobals import *
 
 def create_app(test_config=None):
     # create and configure the app
@@ -36,19 +36,35 @@ def create_app(test_config=None):
     def Landing():
         return render_template("landing.html")
 
-    #Login page 
-    @app.route('/login', methods=['GET', 'POST'])
-    def Login():
-        #POST
-        if request.method == "POST":
-            print("Post Login")
-            result = dbHelper.Login(str(request.form['email']),str(request.form['password']))
-            if result == DBHelper.LOGIN_SUCCESS:
-                return render_template("events.html")
-            else:
-                return render_template("login.html",loginCheck =result)
 
+    #Login page =============
+    @app.route('/login',methods=['GET'])
+    def LoginGet():
+        print("Get Login")
         return render_template("login.html")
+
+    @app.route('/login', methods=['POST'])
+    def Login():
+        print("Post Login")
+        result = dbHelper.Login(str(request.form['email']),str(request.form['password']))
+        print(session[SessLoggedIn])
+
+        if result == DBHelper.LOGIN_SUCCESS:
+            return EventsPageDirect()
+        else:
+            return render_template("login.html",loginCheck =result)
+
+    def EventsPageDirect():
+        if session[SessLoggedIn]:
+            if session[SessUserType] == UserDB.dbRoleUser:
+                print("User")
+                return redirect("/user")
+            elif session[SessUserType] == UserDB.dbRoleHost:
+                print("Host")
+                return redirect("/creator")
+            elif session[SessUserType] == UserDB.dbRoleAdmin:
+                print("Admin")
+                return redirect("/events")
 
     #Registration page 
     @app.route('/register', methods=['GET', 'POST'])
@@ -80,6 +96,10 @@ def create_app(test_config=None):
     #Events page
     @app.route('/events')
     def Events():
+
+        if session[SessLoggedIn]:
+            return EventsPageDirect()
+
         return render_template("events.html")
 
     return app

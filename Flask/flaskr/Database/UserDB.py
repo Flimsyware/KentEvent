@@ -41,12 +41,9 @@ class UserDB:
             return False
 
         isValid = validate_email(inEmail)
-        print(validate_email)
         if isValid:
-            print("is valid")
             self.validEmail = True
         else:
-            print("is not valid")
             self.validEmail = False
         
         self.email = inEmail
