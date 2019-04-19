@@ -50,21 +50,9 @@ def create_app(test_config=None):
         print(session[SessLoggedIn])
 
         if result == DBHelper.LOGIN_SUCCESS:
-            return EventsPageDirect()
+            return redirect("/events")
         else:
             return render_template("login.html",loginCheck =result)
-
-    def EventsPageDirect():
-        if session[SessLoggedIn]:
-            if session[SessUserType] == UserDB.dbRoleUser:
-                print("User")
-                return redirect("/user")
-            elif session[SessUserType] == UserDB.dbRoleHost:
-                print("Host")
-                return redirect("/creator")
-            elif session[SessUserType] == UserDB.dbRoleAdmin:
-                print("Admin")
-                return redirect("/events")
 
     #Registration page 
     @app.route('/register', methods=['GET', 'POST'])
@@ -96,9 +84,16 @@ def create_app(test_config=None):
     #Events page
     @app.route('/events')
     def Events():
-
         if session[SessLoggedIn]:
-            return EventsPageDirect()
+            if session[SessUserType] == UserDB.dbRoleUser:
+                print("User")
+                return redirect("/user")
+            elif session[SessUserType] == UserDB.dbRoleHost:
+                print("Host")
+                return redirect("/creator")
+            elif session[SessUserType] == UserDB.dbRoleAdmin:
+                print("Admin")
+                return redirect("/events")
 
         return render_template("events.html")
 
