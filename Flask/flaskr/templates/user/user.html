@@ -13,35 +13,24 @@
 {% block body_attribs %} class="h-100" {% endblock %}
 {% block body %}
 
+
 <!-- Main content of page -->
 <div class="row h-100 text-center">
     <!-- Sidebar -->
 
     <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#5CB9DD; width:500px;">
         <div class="col" style="width:500px;"><h3>Kent Event</h3></div>
-        <button id = "event" onclick="myFunction()">Create an Event</button>
-        <div id="eventForm" style="display:none;">
+        <button id = "event" onclick="showDetails()">Event Details</button>
+        <div id="eventdetails" style="display:none;">
         <form id="inForm">
-            <label>Event Name:</label>
-            <input type="text" name = "Name"><br>
-            <label>Description:</label>
-            <input type="text" name = "Description"><br>
-            <label>Organization:</label>
-            <input type="text" name = "Org"><br>
-            <label>Time Range:</label>
-            <input type="text" name = "Time"><br>
-            <label>Pick an icon:</label>
-           <table id = "table">
-            <br>
-            <input type="radio" name="iconType" value="blue" style>Blue<br>
-            <input type="radio" name="iconType" value="red">Red<br>
-            <input type="radio" name="iconType" value="green">Green</br>
-            <input type="radio" name="iconType" value="service">Service<br>
-            <input type="radio" name="iconType" value="educational">Educational<br>
-            <input type="radio" name="iconType" value="culture">Culture</br>
-            <input type="radio" name="iconType" value="media">Media</br>
-            </table>
-            <input class="btn btn-primary" type="submit" value="Submit">
+            <label>Event Name:</label><br>
+            <label>Description:</label><br>
+            <label>Organization:</label><br>
+            <label>Time Range:</label><br><br>
+        
+             <input class="btn btn-primary" type="submit" value="Save Event"> 
+
+
         </form>
         </div>
     </div>
@@ -51,17 +40,15 @@
 
 {% block style %}
 <style>
-label{
-margin-top:15px;
-}
+
 
 input[type=submit]{
-background:#5CB9DD;
+background:rgb(39, 154, 199);
 color:black;
 }
 
 #sidebar{
-    width:100%;
+    width:120%;
 }
 
 #event{
@@ -78,13 +65,22 @@ color:black;
     text-align:center;
 }
 
-input[type=text]{
+#eventDetails{
+    background: #FFFF8B;
+    display:block;
+    width:200px;
+    height:650px;
+    margin-left:30px;
     text-align:center;
-    display: block;
-    margin:auto;
-    width:120px;
-    height:20px;
-    padding: 10px;
+}
+
+label{
+    /* text-align:center; */
+    /* display: block; */
+    margin-top:15px;
+    /* width:120px;
+    height:20px; */
+    padding: 4px;
     background:rgb(240, 240, 148);
 }
 </style>
@@ -187,6 +183,16 @@ input[type=text]{
             x.style.display = "none";
         }
     }
+
+    function showDetails(){
+        var x = document.getElementById("eventdetails");
+        if(x.style.display == "none"){
+            x.style.display = "block";
+        }
+        else{
+            x.style.display = "none";
+        }
+    }
 </script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -198,3 +204,4 @@ input[type=text]{
 
 {% endblock %}
 {% endblock %}
+
