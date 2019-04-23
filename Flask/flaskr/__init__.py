@@ -84,7 +84,7 @@ def create_app(test_config=None):
     #Events page
     @app.route('/events')
     def Events():
-        if session[SessLoggedIn]:
+        if session.get(SessLoggedIn):
             if session[SessUserType] == UserDB.dbRoleUser:
                 print("User")
                 return redirect("/user")
