@@ -15,6 +15,7 @@ class DBHelper:
     selectAll = "*"
     DUPLICATE_EMAIL_ERROR = "Duplicate email error for registration."
     INVALID_EMAIL_ERROR = "Input is not an email."
+    NOT_KENT_EMAIL_FOR_CREATOR = "Email is not a kent email for a creator."
     REGISTRATION_FIELDS_INCOMPLETE = "Registration fields were not complete."
     REGISTRATION_SUCCESS = "Registration was a success."
     LOGIN_SUCCESS = "Login was successful."
@@ -40,6 +41,8 @@ class DBHelper:
         self.AddUser(UserDB("TestEmail4@kent.edu","TestPassword4",UserDB.dbRoleHost))
         self.AddUser(UserDB("TestEmail5@kent.edu","TestPassword5",UserDB.dbRoleHost))
         self.AddUser(UserDB("TestEmail6@kent.edu","TestPassword6",UserDB.dbRoleHost))
+
+        
     
     #The only parameters that should be dynamic are the whereValues. everything else should come from class variables
     def __SelectQuery__(self, selectArray, tableName, whereTypes, whereValues):
@@ -85,11 +88,18 @@ class DBHelper:
 
         return self.c.fetchall()
 
+    def AddEvent(self,EventDB):
+        print("adding event")
+    def getAllEvent(self):
+        print("get all events")
+
     def AddUser(self,userDB):
         if userDB.email == None:
             return self.REGISTRATION_FIELDS_INCOMPLETE
         if userDB.validEmail == False:
             return self.INVALID_EMAIL_ERROR
+        if userDB.email.upper().endswith("@kent.edu".upper()) == False and userDB.role == UserDB.dbRoleHost:
+            return self.NOT_KENT_EMAIL
         if userDB.password == None:
             return self.REGISTRATION_FIELDS_INCOMPLETE
         if userDB.role == None:
