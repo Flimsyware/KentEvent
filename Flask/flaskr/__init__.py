@@ -98,3 +98,8 @@ def create_app(test_config=None):
         return render_template("events.html")
 
     return app
+
+    @app.route('/lougout')
+    def Logout():
+        session.clear()
+        return Landing()
