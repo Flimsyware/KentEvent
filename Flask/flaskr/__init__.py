@@ -99,7 +99,7 @@ def create_app(test_config=None):
 
     return app
 
-    @app.route('/lougout')
+    @app.route('/logout')
     def Logout():
         session.clear()
         return Landing()
