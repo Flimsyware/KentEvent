@@ -36,6 +36,10 @@ def create_app(test_config=None):
     def Landing():
         return render_template("landing.html")
 
+   # Game page
+    @app.route('/flynn')
+    def Fish():
+        return render_template("flynn.html")
 
     #Login page =============
     @app.route('/login',methods=['GET'])

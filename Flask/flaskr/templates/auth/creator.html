@@ -14,22 +14,28 @@
 {% block body %}
 
 <!-- Main content of page -->
+
 <div class="row h-100 text-center">
+
     <!-- Sidebar -->
     <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#5CB9DD; width:500px;">
         <div class="col" style="width:500px;"><h3>Kent Event</h3></div>
         <div  id="eventForm" style="display:none;">
             <form id="inForm">
-                <label>Event Name:</label>
+                <label>Event Name:*</label>
                 <input type="text" name="Name"><br>
                 <label>Description:</label>
                 <input type="text" name="Description"><br>
-                <label>Address:</label>
+                <label>Address:*</label>
                 <input type="text" name="Location"><br>
-                <label>Organization:</label>
+                <label>Organization:*</label>
                 <input type="text" name="Org"><br>
-                <label>Time Range:</label>
-                <input type="text" name="Time"><br>
+                <label>Start Time:*</label>
+                <input type="text" name="startTime"><br>
+                <label>End Time:*</label>
+                <input type="text" name="endTime"><br>
+                <label>Date:*</label><br>
+                <input type="text" name="Date"><br>
                 <label>Pick an icon:</label>
                 <table id="table">
                     <br>
@@ -119,6 +125,12 @@ margin-top:15px;
             $('.collapse').toggle();
         });
 
+    }
+
+    function LogOut(controlDiv, map){
+        var controlUI = document.createElement('img');
+        controlUI.src = "";
+        controlUI.title = 'Logout';
     }
 
     // Setup Google Map
@@ -217,16 +229,16 @@ margin-top:15px;
                 infoWindow = new google.maps.InfoWindow;
                 map.setCenter(pos);
 
-                //youLoc.addListener('mouseover', function () {
-                //    infoWindow.setPosition(pos);
-                //    infoWindow.setContent("Your current location");
-                //    infoWindow.open(map);
-                //});
+                youLoc.addListener('mouseover', function () {
+                   infoWindow.setPosition(pos);
+                   infoWindow.setContent("Your current location");
+                   infoWindow.open(map);
+                });
 
-                //// assuming you also want to hide the infowindow when user mouses-out
-                //youLoc.addListener('mouseout', function () {
-                //    infoWindow.close();
-                //});
+                // assuming you also want to hide the infowindow when user mouses-out
+                youLoc.addListener('mouseout', function () {
+                   infoWindow.close();
+                });
 
             }, function () {
                     handleLocationError(true, infoWindow, map.getCenter());
