@@ -54,7 +54,7 @@ class DBHelper:
             selectText = selectText + select
             if i != len(selectArray) - 1:
                 selectText = selectText + ","
-        
+
         #adds the from with the table name
         selectText = selectText + " From {} ".format(tableName)
 
@@ -63,28 +63,24 @@ class DBHelper:
             #print(selectText)
             self.c.execute(selectText + ';')
             return self.c.fetchall()
-        
-        #if wheretypes is not 0 but they dont match in 
+
+        #if wheretypes is not 0 but they dont match in
         if len(whereTypes) != len(whereValues):
             return self.QUERY_FAILED
-        
-        selectText = selectText + "where ("
 
-        
+        selectText = selectText + "where "
+
+
         for i,where in enumerate(whereTypes,0):
-            selectText = selectText + where
+            selectText = selectText + where + " = ?"
             if i != len(whereTypes) - 1:
-                selectText = selectText + ","
-        
-        selectText = selectText + ") = (?"
+                selectText = selectText + " AND "
 
         args = (whereValues[0],)
         for i in range(1,len(whereValues)):
             args = args + (whereValues[i],)
-            selectText = selectText + ",?"
 
-        selectText = selectText + ");"
-        #print(selectText)
+        selectText = selectText + ";"
         self.c.execute(selectText,args)
 
         return self.c.fetchall()
