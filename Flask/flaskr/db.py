@@ -99,7 +99,7 @@ class DBHelper:
         if userDB.validEmail == False:
             return self.INVALID_EMAIL_ERROR
         if userDB.email.upper().endswith("@kent.edu".upper()) == False and userDB.role == UserDB.dbRoleHost:
-            return self.NOT_KENT_EMAIL
+            return self.NOT_KENT_EMAIL_FOR_CREATOR
         if userDB.password == None:
             return self.REGISTRATION_FIELDS_INCOMPLETE
         if userDB.role == None:
@@ -143,3 +143,5 @@ class DBHelper:
 
 
         print("Testing successful")
+
+
