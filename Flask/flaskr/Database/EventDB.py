@@ -2,7 +2,6 @@ CreateEventTableText = """
     CREATE TABLE if not exists Event(
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         Name varchar(255) NOT NULL,
-        UniversityID int NOT NULL,
         CreatorID int NOT NULL,
         Address TEXT NOT NULL,
         Description TEXT,
@@ -13,19 +12,20 @@ CreateEventTableText = """
         CreationTime time NOT NULL,
         Cost int,
         RoomNumber int,
-        FOREIGN KEY (CreatorID) REFERENCES User(ID),
-        FOREIGN KEY (UniversityID) REFERENCES University(ID)
+        FOREIGN KEY (CreatorID) REFERENCES User(ID)
     )
 """
-
+#UniversityID int NOT NULL,
+#FOREIGN KEY (UniversityID) REFERENCES University(ID)
 
 class EventDB:
     #This is the actual name of the variables in the database table
     tableName = "Event"
     dbID = "ID"
     dbName = "Name"
-    dbUniversityID = "UniversityID"
+    #dbUniversityID = "UniversityID"
     dbCreatorID = "CreatorID"
+    dbAddress = "Address"
     dbDescription = "Description"
     dbStartTime = "StartTime"
     dbEndTime = "EndTime"
@@ -38,8 +38,9 @@ class EventDB:
     def __init__(self):
         self.ID = None
         self.name = None
-        self.universityID = None
+        #self.universityID = None
         self.creatorID = None
+        self.address = None
         self.description = None
         self.startTIme = None
         self.endTime = None

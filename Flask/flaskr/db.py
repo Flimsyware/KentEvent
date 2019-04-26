@@ -18,6 +18,7 @@ class DBHelper:
     NOT_KENT_EMAIL_FOR_CREATOR = "Email is not a kent email for a creator."
     REGISTRATION_FIELDS_INCOMPLETE = "Registration fields were not complete."
     REGISTRATION_SUCCESS = "Registration was a success."
+    EVENT_CREATION_MISSING_FIELD = "Missing field from event."
     LOGIN_SUCCESS = "Login was successful."
     LOGIN_FAILED = "Login was not successful."	
     QUERY_FAILED = "Query failed."
@@ -88,10 +89,44 @@ class DBHelper:
 
         return self.c.fetchall()
 
-    def AddEvent(self,EventDB):
-        print("adding event")
+    def AddEvent(self,eventDB):
+        if eventDB.name == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        #if eventDB.universityID == None:
+            #return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.creatorID == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.address == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.startTime == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.endTime == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.date == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.creationDate == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.creationTime == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+
+
+        
+        eventArgs = (
+            eventDB.name, eventDB.creatorID, eventDB.address,\
+            eventDB.description, eventDB.startTime, eventDB.endTime, eventDB.date, eventDB.creationDate,\
+            eventDB.creationTime, eventDB.cost, eventDB.roomNumber)
+
+        text = "Insert into {} ({},{},{},{},{},{},{},{},{},{},{}) values (?,?,?,?,?,?,?,?,?,?,?)".format(EventDB.tableName,\
+            EventDB.dbName, EventDB.dbCreatorID,EventDB.dbAddress,\
+            EventDB.dbDescription, EventDB.dbStartTime, EventDB.dbEndTime, EventDB.dbDate, EventDB.dbCreationDate,\
+            EventDB.dbCreationTime, EventDB.dbCost, EventDB.dbRoomNumber)
+        self.c.execute(text,eventArgs )
+        self.conn.commit()
+        
+
     def getAllEvent(self):
-        print("get all events")
+        #tableName, whereTypes, whereValues
+        return self.__SelectQuery__([self.selectAll],EventDB.tableName,[],[])
 
     def AddUser(self,userDB):
         if userDB.email == None:
@@ -115,6 +150,7 @@ class DBHelper:
         self.c.execute("Insert into User ({},{},{}) values (?,?,?);".format(UserDB.dbEmail,UserDB.dbPassword,UserDB.dbRoleEnumName),(userDB.email,userDB.password,userDB.role))
         self.conn.commit()
         return self.REGISTRATION_SUCCESS
+
 
     def Login(self,email,password):
         if email == None:
