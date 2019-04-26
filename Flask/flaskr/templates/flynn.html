@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="dino"></div>
+<button onclick="jump()">Jump!</button>
+
+{%block script%}
+<script>
+var y = 0;      // Our player's current position
+var yVel = 0;   // Our player's acceleration, upwards or down
+
+var jumpHeight = 5;     // how high our player jumps
+
+                // our player's character
+var dino = document.getElementById('dino');
+
+// This function will be called when we click the button
+function jump() {
+  // This if statement checks to see if we're less than 2 pixels 
+  // from the ground
+  if (y < 2) {
+    // If we're grounded, let's set our upward acceleration to
+    // our jump height!
+     yVel = jumpHeight;
+  }
+}
+
+// This function will happen once every 10 milliseconds 
+// (See the bottom of the code)
+function tick() {
+  // We add the amount we're accelerating by to our current
+  // position
+  y += yVel;
+  // We set our current position to the css attribute 'bottom',
+  // corresponding to how many pixels we are above the bottom of the page
+  dino.style.bottom = y + 'px'
+  // We call our gravity function
+  doGravity();
+  // We call the obstacle handler
+  obstacleTick();   // NOTE - omit this function if it's too complicated!
+}
+
+// This function will make the player fall
+// UNLESS the player is grounded
+function doGravity() {
+  // If we're above the ground, decrease our yVel by the pull of gravity
+  if (y > 0) {
+     yVel -= .1;
+    // Otherwise, ensure we don't have negative yVel by setting it to 0
+  } else {
+    yVel = 0;
+  }
+}
+
+// Finally, to run our game, we call the tick()
+// function every 10 milliseconds
+setInterval(tick, 10)
+
+
+
+//
+// THIS IS THE OBSTACLE CODE. OMIT THIS IF YOU NEED TO SIMPLIFY THIS LESSON
+// 
+
+var obstacle;             // References the current object
+var obstaclePos = -11;    // References the object's position, in % of the screen
+                          // away from the left hand side
+                          // (Set to -11 to trigger the 'new object' case)
+
+// This function will make a new object appear to the right of the screen,
+// make it move all the way across, and then make another one. 
+function obstacleTick() {
+  // If the current object is all the way to the left of the screen, we need
+  // a new object to take its place
+  if (obstaclePos < -10) {
+    // First, we create a new div.
+    obstacle = document.createElement("div");
+    // Next, we give it the class 'block' (See the CSS)
+    obstacle.className = 'block';
+    // Finally, we can attach it to the body of our HTML
+    document.body.appendChild(obstacle);
+    // And then set it's position to 110% away from the left of the screen
+    // (Making it appear 10% outside of the screen to the right)
+    obstaclePos = 110;
+  } else {
+    // If the object isn't completely to the right, we need to display it's position
+    // by setting the 'left' attribute.
+    obstacle.style.left = obstaclePos + '%';
+    // Then, to make it move left, we subtract a small amount from it's distance
+    // from the left of the screen. 
+    obstaclePos -= .2;
+  }
+}
+</script>
+
+{%block style%}
+<style>
+#dino {
+  width: 30px;
+  height: 30px;
+  background: black;
+  position: absolute;
+}
+
+.block {
+  width: 50px;
+  height: 50px;
+  background: blue;
+  position: absolute;
+  bottom: 0px;
+}
+
+
+</style>
+
+{% endblock %}
+{% endblock %}
+{% endblock %}

@@ -16,21 +16,63 @@
 <!-- Main content of page -->
 <div class="row h-100 text-center">
     <!-- Sidebar -->
-    <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#039BE5;">
-        <div class="col"><h3>Event Title</h3></div>
+
+    <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#5CB9DD; width:500px;">
+        <div class="col" style="width:500px;"><h3>Kent Event</h3></div>
     </div>
     <!-- Map -->
     <div class="col" id="map"></div>
 </div>
 
+{% block style %}
+<style>
+    label {
+        margin-top: 15px;
+    }
+
+    input[type=submit] {
+        background: #5CB9DD;
+        color: black;
+    }
+
+    #sidebar {
+        width: 100%;
+    }
+
+    #event {
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    #eventForm {
+        background: #FFFF8B;
+        display: block;
+        width: 200px;
+        height: 650px;
+        margin-left: 30px;
+        text-align: center;
+    }
+
+    input[type=text] {
+        text-align: center;
+        display: block;
+        margin: auto;
+        width: 120px;
+        height: 20px;
+        padding: 10px;
+        background: rgb(240, 240, 148);
+    }
+</style>
+{% endblock %}
 {% block scripts %}
 
 <script>
 
     // Setup Google Map
+    var pos, lastMarker;
+    var creatingNewEvent = false;
     function initMap() {
         var uluru = { lat: 41.1411794353, lng: -81.3383786465 };
-        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
         var marker;
         var map = new google.maps.Map(
             document.getElementById('map'), {
@@ -38,37 +80,39 @@
                 center: uluru,
                 disableDefaultUI: true
             });
-        
-        //blue icon http://i68.tinypic.com/2wojejb.png
-        //red icon http://i63.tinypic.com/242aqh3.png
-        //green icon http://i66.tinypic.com/14u84ci.png
-
-        //service icon http://i66.tinypic.com/2wpo45i.png
-        //educational icon http://i66.tinypic.com/2hqt0fp.png
-        //culture icon http://i63.tinypic.com/29e6j46.png
-        //media icon http://i64.tinypic.com/2quunf4.png
-
+        geocoder = new google.maps.Geocoder();
 
         // Center map on user's location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                var pos = {
+                pos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                var marker = new google.maps.Marker({
+                marker = new google.maps.Marker({
                     position: pos,
                     map: map,
-                    title: 'Your guy',
-                    icon: "http://i63.tinypic.com/29e6j46.png",
+                    title: 'Your location',
+                    icon: "http://i66.tinypic.com/2hqt0fp.png"
                 });
-                marker.addListener('click', function () {
-                    $('.collapse').toggle();
-                    //marker.setIcon(icons.sample1.icon);
-                });
+
+                // Called when clicking on an event marker
+                //marker.addListener('click', function () {
+                //    $('.collapse').toggle();
+                //});
+
+                //blue icon http://i68.tinypic.com/2wojejb.png
+                //red icon http://i63.tinypic.com/242aqh3.png
+                //green icon http://i66.tinypic.com/14u84ci.png
+
+                //service icon http://i66.tinypic.com/2wpo45i.png
+                //educational icon http://i66.tinypic.com/2hqt0fp.png
+                //culture icon http://i63.tinypic.com/29e6j46.png
+                //media icon http://i64.tinypic.com/2quunf4.png
+
                 infoWindow = new google.maps.InfoWindow;
                 map.setCenter(pos);
-                
+
             }, function () {
                 handleLocationError(true, infoWindow, map.getCenter());
             });
@@ -76,6 +120,17 @@
             // Browser doesn't support Geolocation
             handleLocationError(false, infoWindow, map.getCenter());
         }
+
+        map.addListener('mouseover', function () {
+            infowindow.setContent("Your current location");
+            infowindow.open(map);
+        });
+
+        // assuming you also want to hide the infowindow when user mouses-out
+        marker.addListener('mouseout', function () {
+            infowindow.close();
+        });
+
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -85,6 +140,7 @@
             'Error: Your browser doesn\'t support geolocation.');
         infoWindow.open(map);
     }
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
