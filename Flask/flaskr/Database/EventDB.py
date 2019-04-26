@@ -23,6 +23,7 @@ class EventDB:
     #This is the actual name of the variables in the database table
     tableName = "Event"
     dbID = "ID"
+    dbName = "Name"
     dbUniversityID = "UniversityID"
     dbCreatorID = "CreatorID"
     dbDescription = "Description"
@@ -36,6 +37,7 @@ class EventDB:
     
     def __init__(self):
         self.ID = None
+        self.name = None
         self.universityID = None
         self.creatorID = None
         self.description = None

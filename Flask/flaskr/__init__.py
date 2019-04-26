@@ -3,6 +3,7 @@ from flask import Flask , render_template, request,session,redirect
 from flask_bootstrap import Bootstrap
 from flaskr.db import DBHelper
 from flaskr.Database.UserDB import UserDB
+from flaskr.Database.EventDB import EventDB
 from flaskr.SessionGlobals import *
 
 def create_app(test_config=None):
@@ -101,9 +102,13 @@ def create_app(test_config=None):
 
         return render_template("events.html")
 
-    return app
 
     @app.route('/logout')
     def Logout():
         session.clear()
         return Landing()
+
+    
+
+    return app
+
