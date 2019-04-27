@@ -1,9 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Database",
     "\\templates",
     "\\templates\\user"
   ],
-  "SelectedNode": "\\templates\\events.html",
+  "SelectedNode": "\\__init__.py",
   "PreviewInSolutionExplorer": false
 }

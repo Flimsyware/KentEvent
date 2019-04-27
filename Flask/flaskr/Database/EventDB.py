@@ -49,4 +49,3 @@ class EventDB:
         self.creationTime = None
         self.cost = None
         self.roomNumber = None
-
