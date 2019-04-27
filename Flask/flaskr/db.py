@@ -1,11 +1,9 @@
 import sqlite3
-from flask import session
+from flask import current_app, session
 from flaskr.Database.UniversityDB import UniversityDB,CreateUniversityTableText
 from flaskr.Database.UserDB import UserDB,CreateUserTableText
 from flaskr.Database.EventDB import EventDB,CreateEventTableText
 from flaskr.SessionGlobals import *
-
-# conn = sqlite3.connect(':memory:')
 
 
 
@@ -23,7 +21,10 @@ class DBHelper:
     LOGIN_FAILED = "Login was not successful."	
     QUERY_FAILED = "Query failed."
     def __init__(self):
-        self.conn = sqlite3.connect("database.db", check_same_thread=False)
+        self.conn = sqlite3.connect(
+            current_app.config['DATABASE'], 
+            check_same_thread=False
+        )
         self.c = self.conn.cursor()
         self.__CreateTablesIfNotExists__()
         self.__AddTestableInformationToDatabase__()
