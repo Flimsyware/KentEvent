@@ -18,6 +18,7 @@ class DBHelper:
     NOT_KENT_EMAIL_FOR_CREATOR = "Email is not a kent email for a creator."
     REGISTRATION_FIELDS_INCOMPLETE = "Registration fields were not complete."
     REGISTRATION_SUCCESS = "Registration was a success."
+    EVENT_CREATION_MISSING_FIELD = "Missing field from event."
     LOGIN_SUCCESS = "Login was successful."
     LOGIN_FAILED = "Login was not successful."	
     QUERY_FAILED = "Query failed."
@@ -53,7 +54,7 @@ class DBHelper:
             selectText = selectText + select
             if i != len(selectArray) - 1:
                 selectText = selectText + ","
-        
+
         #adds the from with the table name
         selectText = selectText + " From {} ".format(tableName)
 
@@ -62,36 +63,66 @@ class DBHelper:
             #print(selectText)
             self.c.execute(selectText + ';')
             return self.c.fetchall()
-        
-        #if wheretypes is not 0 but they dont match in 
+
+        #if wheretypes is not 0 but they dont match in
         if len(whereTypes) != len(whereValues):
             return self.QUERY_FAILED
-        
-        selectText = selectText + "where ("
 
-        
+        selectText = selectText + "where "
+
+
         for i,where in enumerate(whereTypes,0):
-            selectText = selectText + where
+            selectText = selectText + where + " = ?"
             if i != len(whereTypes) - 1:
-                selectText = selectText + ","
-        
-        selectText = selectText + ") = (?"
+                selectText = selectText + " AND "
 
         args = (whereValues[0],)
         for i in range(1,len(whereValues)):
             args = args + (whereValues[i],)
-            selectText = selectText + ",?"
 
-        selectText = selectText + ");"
-        #print(selectText)
+        selectText = selectText + ";"
         self.c.execute(selectText,args)
 
         return self.c.fetchall()
 
-    def AddEvent(self,EventDB):
-        print("adding event")
+    def AddEvent(self,eventDB):
+        if eventDB.name == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        #if eventDB.universityID == None:
+            #return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.creatorID == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.address == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.startTime == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.endTime == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.date == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.creationDate == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+        if eventDB.creationTime == None:
+            return self.EVENT_CREATION_MISSING_FIELD
+
+
+        
+        eventArgs = (
+            eventDB.name, eventDB.creatorID, eventDB.address,\
+            eventDB.description, eventDB.startTime, eventDB.endTime, eventDB.date, eventDB.creationDate,\
+            eventDB.creationTime, eventDB.cost, eventDB.roomNumber)
+
+        text = "Insert into {} ({},{},{},{},{},{},{},{},{},{},{}) values (?,?,?,?,?,?,?,?,?,?,?)".format(EventDB.tableName,\
+            EventDB.dbName, EventDB.dbCreatorID,EventDB.dbAddress,\
+            EventDB.dbDescription, EventDB.dbStartTime, EventDB.dbEndTime, EventDB.dbDate, EventDB.dbCreationDate,\
+            EventDB.dbCreationTime, EventDB.dbCost, EventDB.dbRoomNumber)
+        self.c.execute(text,eventArgs )
+        self.conn.commit()
+        
+
     def getAllEvent(self):
-        print("get all events")
+        #tableName, whereTypes, whereValues
+        return self.__SelectQuery__([self.selectAll],EventDB.tableName,[],[])
 
     def AddUser(self,userDB):
         if userDB.email == None:
@@ -99,7 +130,7 @@ class DBHelper:
         if userDB.validEmail == False:
             return self.INVALID_EMAIL_ERROR
         if userDB.email.upper().endswith("@kent.edu".upper()) == False and userDB.role == UserDB.dbRoleHost:
-            return self.NOT_KENT_EMAIL
+            return self.NOT_KENT_EMAIL_FOR_CREATOR
         if userDB.password == None:
             return self.REGISTRATION_FIELDS_INCOMPLETE
         if userDB.role == None:
@@ -115,6 +146,7 @@ class DBHelper:
         self.c.execute("Insert into User ({},{},{}) values (?,?,?);".format(UserDB.dbEmail,UserDB.dbPassword,UserDB.dbRoleEnumName),(userDB.email,userDB.password,userDB.role))
         self.conn.commit()
         return self.REGISTRATION_SUCCESS
+
 
     def Login(self,email,password):
         if email == None:
@@ -143,3 +175,5 @@ class DBHelper:
 
 
         print("Testing successful")
+
+
