@@ -26,6 +26,7 @@ class EventDB:
     dbUniversityID = "UniversityID"
     dbCreatorID = "CreatorID"
     dbDescription = "Description"
+    dbAddress = "Address"
     dbStartTime = "StartTime"
     dbEndTime = "EndTime"
     dbDate = "Date"
@@ -34,16 +35,17 @@ class EventDB:
     dbCost = "Cost"
     dbRoomNumber = "RoomNumber"
     
-    def __init__(self):
-        self.ID = None
-        self.universityID = None
-        self.creatorID = None
-        self.description = None
-        self.startTIme = None
-        self.endTime = None
-        self.date = None
-        self.creationDate = None
-        self.creationTime = None
-        self.cost = None
-        self.roomNumber = None
+    def __init__(self,ID,universityID,creatorID,description,address,startTime,endTime,date,creationDate,creationTime,cost,roomNumber):
+        self.ID = ID
+        self.universityID = universityID
+        self.creatorID = creatorID
+        self.description = description
+        self.address = address
+        self.startTIme = startTime
+        self.endTime = endTime
+        self.date = date
+        self.creationDate = creationDate
+        self.creationTime = creationTime
+        self.cost = cost
+        self.roomNumber = roomNumber
 

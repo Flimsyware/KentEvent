@@ -1,8 +1,10 @@
 import os
+import json
 from flask import Flask , render_template, request,session,redirect
 from flask_bootstrap import Bootstrap
 from flaskr.db import DBHelper
 from flaskr.Database.UserDB import UserDB
+from flaskr.Database.EventDB import EventDB
 from flaskr.SessionGlobals import *
 
 def create_app(test_config=None):
@@ -83,7 +85,11 @@ def create_app(test_config=None):
     #Profile for user
     @app.route('/user')
     def User():
-        return render_template("user/user.html")
+        eventArray = [EventDB("1","1","1","Testing 1","Kent State University","5:00","10:00","4/26/19","4/25/19","5:50","$0.00","217"), EventDB("2","1","1","Testing 2","3270 S. Forest dr. conneaut ohio 44030","6:00","11:00","4/26/19","4/27/19","5:52","$5.00","303")] 
+        print(eventArray[0])
+        a = json.dumps(eventArray)
+        print(a)
+        return render_template("user/user.html", eventArray = eventArray, arrayLength = len(eventArray))
 
     #Events page
     @app.route('/events')
