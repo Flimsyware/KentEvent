@@ -1,5 +1,4 @@
 import os
-import json
 from flask import Flask , render_template, request,session,redirect
 from flask_bootstrap import Bootstrap
 from flaskr.db import DBHelper
@@ -85,11 +84,53 @@ def create_app(test_config=None):
     #Profile for user
     @app.route('/user')
     def User():
-        eventArray = [EventDB("1","1","1","Testing 1","Kent State University","5:00","10:00","4/26/19","4/25/19","5:50","$0.00","217"), EventDB("2","1","1","Testing 2","3270 S. Forest dr. conneaut ohio 44030","6:00","11:00","4/26/19","4/27/19","5:52","$5.00","303")] 
-        print(eventArray[0])
-        a = json.dumps(eventArray)
-        print(a)
-        return render_template("user/user.html", eventArray = eventArray, arrayLength = len(eventArray))
+        event1 = EventDB()
+        event1.ID = 1
+        event1.Name = "event1"
+        event1.description = "This is test event 1"
+        event1.startTime = "5:00"
+        event1.endTime = "10:00"
+        event1.date = "4/28/19"
+        event1.address = "kent state student center"
+        event1.roomNumber = 1
+        event1.cost = "free"
+        event2 = EventDB()
+        event2.ID = 2
+        event2.Name = "event2"
+        event2.description = "This is test event 2"
+        event2.startTime = "1:00"
+        event2.endTime = "3:30"
+        event2.date = "4/28/19"
+        event2.address = "bowman hall"
+        event2.roomNumber = 217
+        event2.cost = "$5.00"
+        
+
+        eventDic1 = {
+			"ID" : event1.ID,
+            "Name" : event1.Name,
+			"Description" : event1.description,
+			"StartTime" : event1.startTime,
+			"EndTime" : event1.endTime,
+			"Date" : event1.date,
+			"Address" : event1.address,
+            "RoomNumber" : event1.roomNumber,
+			"Cost" : event1.cost
+        }
+        eventDic2 = {
+            "ID" : event2.ID,
+            "Name" : event2.Name,
+			"Description" : event2.description,
+			"StartTime" : event2.startTime,
+			"EndTime" : event2.endTime,
+			"Date" : event2.date,
+			"Address" : event2.address,
+            "RoomNumber" : event2.roomNumber,
+			"Cost" : event2.cost
+        }
+
+        listOfEvents = [eventDic1,eventDic2]
+        return render_template("user/user.html", listOfEvents = listOfEvents)
 
     #Events page
     @app.route('/events')
