@@ -80,7 +80,8 @@ def create_app(test_config=None):
     #Profile for creator 
     @app.route('/creator')
     def Creator():
-        return render_template("auth/creator.html")
+        listOfEvents = [eventDic1,eventDic2]
+        return render_template("auth/creator.html", listOfEvents = listOfEvents)
 
     #Profile for user
     @app.route('/user')
@@ -147,7 +148,8 @@ def create_app(test_config=None):
                 print("Admin")
                 return redirect("/events")
 
-        return render_template("events.html")
+        listOfEvents = [eventDic1,eventDic2]
+        return render_template("events.html", listOfEvents = listOfEvents)
 
 
     @app.route('/logout')

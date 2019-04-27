@@ -3,8 +3,9 @@
     "",
     "\\Database",
     "\\templates",
+    "\\templates\\auth",
     "\\templates\\user"
   ],
-  "SelectedNode": "\\__init__.py",
+  "SelectedNode": "\\templates\\base.html",
   "PreviewInSolutionExplorer": false
 }
