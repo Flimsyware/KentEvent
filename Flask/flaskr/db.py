@@ -44,6 +44,37 @@ class DBHelper:
         self.AddUser(UserDB("TestEmail5@kent.edu","TestPassword5",UserDB.dbRoleHost))
         self.AddUser(UserDB("TestEmail6@kent.edu","TestPassword6",UserDB.dbRoleHost))
 
+        if(len(self.getAllEvent()) == 0):
+            event1 = EventDB()
+            event1.ID = 1
+            event1.name = "event1"
+            event1.creatorID = session[SessUserID]
+            event1.description = "This is test event 1"
+            event1.startTime = "5:00"
+            event1.endTime = "10:00"
+            event1.date = "4/28/19"
+            event1.address = "kent state student center"
+            event1.creationDate = "now"
+            event1.creationTime = "now" 
+            event1.roomNumber = 1
+            event1.cost = "free"
+            event2 = EventDB()
+            event2.ID = 2
+            event2.name = "event2"
+            event2.description = "This is test event 2"
+            event2.creatorID = session[SessUserID]
+            event2.startTime = "1:00"
+            event2.endTime = "3:30"
+            event2.date = "4/28/19"
+            event2.address = "bowman hall"
+            event2.creationDate = "now"
+            event2.creationTime = "now"
+            event2.roomNumber = 217
+            event2.cost = "$5.00"
+
+            self.AddEvent(event1)
+            self.AddEvent(event2)
+
         
     
     #The only parameters that should be dynamic are the whereValues. everything else should come from class variables
@@ -63,7 +94,7 @@ class DBHelper:
         if len(whereTypes) == 0:
             #print(selectText)
             self.c.execute(selectText + ';')
-            return self.c.fetchall()
+            return [self.c.fetchall(),self.c.description]
 
         #if wheretypes is not 0 but they dont match in
         if len(whereTypes) != len(whereValues):
@@ -84,7 +115,7 @@ class DBHelper:
         selectText = selectText + ";"
         self.c.execute(selectText,args)
 
-        return self.c.fetchall()
+        return [self.c.fetchall(),self.c.description]
 
     def AddEvent(self,eventDB):
         if eventDB.name == None:
@@ -123,7 +154,16 @@ class DBHelper:
 
     def getAllEvent(self):
         #tableName, whereTypes, whereValues
-        return self.__SelectQuery__([self.selectAll],EventDB.tableName,[],[])
+        results = self.__SelectQuery__([self.selectAll],EventDB.tableName,[],[])
+        newResult = []
+        for event in results[0]:
+            eventDict = {}
+            for eventElement, eventElementName in zip(event,results[1]):
+                eventDict[eventElementName[0]] = eventElement
+            
+            newResult.append(eventDict)
+
+        return newResult
 
     def AddUser(self,userDB):
         if userDB.email == None:
@@ -138,7 +178,7 @@ class DBHelper:
             return self.REGISTRATION_FIELDS_INCOMPLETE
 
         #self.c.execute("Select {} from {} where ({}) = (?);".format(UserDB.dbEmail,UserDB.tableName,UserDB.dbEmail),(userDB.email,))
-        rows = self.__SelectQuery__([UserDB.dbEmail],UserDB.tableName,[UserDB.dbEmail],[userDB.email])
+        rows = self.__SelectQuery__([UserDB.dbEmail],UserDB.tableName,[UserDB.dbEmail],[userDB.email])[0]
         #print(rows)
 
         if len(rows) > 0:
@@ -157,7 +197,7 @@ class DBHelper:
 
 
         #self.c.execute("Select * from {} where ({},{}) = (?,?);".format(UserDB.tableName,UserDB.dbEmail,UserDB.dbPassword),(email,password))
-        rows = self.__SelectQuery__([UserDB.dbID,UserDB.dbRoleEnumName],UserDB.tableName,[UserDB.dbEmail,UserDB.dbPassword],[email,password])
+        rows= self.__SelectQuery__([UserDB.dbID,UserDB.dbRoleEnumName],UserDB.tableName,[UserDB.dbEmail,UserDB.dbPassword],[email,password])[0]
 
         if len(rows) > 0:
             session[SessLoggedIn] = True
