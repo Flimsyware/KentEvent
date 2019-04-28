@@ -5,6 +5,7 @@ from flaskr.db import DBHelper
 from flaskr.Database.UserDB import UserDB
 from flaskr.Database.EventDB import EventDB
 from flaskr.SessionGlobals import *
+import datetime
 
 def create_app(test_config=None):
     # create and configure the app
@@ -83,6 +84,24 @@ def create_app(test_config=None):
         listOfEvents = dbHelper.getAllEvent()
         ##listOfEvents = [eventDic1,eventDic2]
         return render_template("auth/creator.html", listOfEvents = listOfEvents)
+
+    @app.route('/creator', methods=["POST"])
+    def CreatorPost():
+        event = EventDB()
+        event.name = request.form[EventDB.dbName]
+        event.description = request.form[EventDB.dbDescription]
+        event.address = request.form[EventDB.dbAddress]
+        event.creatorID = session[SessUserID]
+        event.startTime = request.form[EventDB.dbStartTime]
+        event.endTime = request.form[EventDB.dbEndTime]
+        event.date = request.form[EventDB.dbDate]
+        event.creationDate = datetime.datetime.now().strftime("%Y-%m-%d")
+        event.creationTime = datetime.datetime.now().strftime("%H:%M")
+
+        dbHelper.AddEvent(event)
+
+        return Creator()
+
 
     #Profile for user
     @app.route('/user')

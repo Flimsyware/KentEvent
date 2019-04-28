@@ -42,7 +42,7 @@ class EventDB:
         self.creatorID = None
         self.address = None
         self.description = None
-        self.startTIme = None
+        self.startTime = None
         self.endTime = None
         self.date = None
         self.creationDate = None

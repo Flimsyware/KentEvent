@@ -35,19 +35,19 @@
             <br />
             <h3>Kent Event</h3>
             <div id="eventForm" style="display:none;">
-                <form id="inForm">
+                <form id="inForm" method="post">
                     <label>Event Name:*</label>
                     <input type="text" name="Name"><br>
                     <label>Description:</label>
                     <input type="text" name="Description"><br>
                     <label>Address:*</label>
-                    <input type="text" name="Location"><br>
-                    <label>Organization:*</label>
-                    <input type="text" name="Org"><br>
+                    <input type="text" name="Address"><br>
+                    <!--<label>Organization:*</label>
+                    <input type="text" name="Org"><br>-->
                     <label>Start Time:*</label>
-                    <input type="text" name="startTime"><br>
+                    <input type="text" name="StartTime"><br>
                     <label>End Time:*</label>
-                    <input type="text" name="endTime"><br>
+                    <input type="text" name="EndTime"><br>
                     <label>Date:*</label><br>
                     <input type="text" name="Date"><br>
                     <label>Pick an icon:</label>
@@ -69,259 +69,261 @@
                 </form>
             </div>
         </div>
-        <!-- Map -->
-        <div class="col" id="map"></div>
     </div>
+    <!-- Map -->
+    <div class="col" id="map"></div>
+</div>
 
-    {% block style %}
-    <style>
-        #logout {
-            color: white;
-            font-family: Roboto;
-        }
+{% block style %}
+<style>
+    #logout {
+        color: white;
+        font-family: Roboto;
+    }
 
-        label {
-            margin-top: 15px;
-        }
+    label {
+        margin-top: 15px;
+    }
 
-        #eventForm {
-            background: #FFFF8B;
-            display: block;
-            margin-left: 12px;
-        }
-    </style>
-    {% endblock %}
-    {% block scripts %}
+    #eventForm {
+        background: #FFFF8B;
+        display: block;
+        margin-left: 12px;
+    }
+</style>
+{% endblock %}
+{% block scripts %}
 
-    <script>
+<script type="text/javascript">
 
-        // Create event button
-        function CenterControl(controlDiv, map) {
+    // Create event button
+    function CenterControl(controlDiv, map) {
 
-            // Set CSS for the control border.
-            var controlUI = document.createElement('div');
-            controlUI.style.backgroundColor = '#fff';
-            controlUI.style.border = '2px solid #fff';
-            controlUI.style.borderRadius = '3px';
-            controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-            controlUI.style.cursor = 'pointer';
-            controlUI.style.marginBottom = '22px';
-            controlUI.style.textAlign = 'center';
-            controlUI.title = 'Click to create an event';
-            controlDiv.appendChild(controlUI);
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to create an event';
+        controlDiv.appendChild(controlUI);
 
-            // Set CSS for the control interior.
-            var controlText = document.createElement('div');
-            controlText.style.color = 'rgb(25,25,25)';
-            controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-            controlText.style.fontSize = '16px';
-            controlText.style.lineHeight = '38px';
-            controlText.style.paddingLeft = '5px';
-            controlText.style.paddingRight = '5px';
-            controlText.innerHTML = 'Create Event';
-            controlUI.appendChild(controlText);
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '16px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '5px';
+        controlText.style.paddingRight = '5px';
+        controlText.innerHTML = 'Create Event';
+        controlUI.appendChild(controlText);
 
-            // Setup the click event listeners
-            controlUI.addEventListener('click', function () {
-                var x = document.getElementById("eventForm");
-                if (x.style.display == "none") {
-                    x.style.display = "block";
-                    creatingNewEvent = true;
-                }
-                else {
-                    x.style.display = "none";
-                    creatingNewEvent = false;
-                    $('input[type = text][name = Location]').val("");
-                    if (lastMarker != null) lastMarker.setMap(null);
-                }
-                $('.collapse').toggle();
-            });
+        // Setup the click event listeners
+        controlUI.addEventListener('click', function () {
+            var x = document.getElementById("eventForm");
+            if (x.style.display == "none") {
+                x.style.display = "block";
+                creatingNewEvent = true;
+            }
+            else {
+                x.style.display = "none";
+                creatingNewEvent = false;
+                $('input[type = text][name = Address]').val("");
+                if (lastMarker != null) lastMarker.setMap(null);
+            }
+            $('.collapse').toggle();
+        });
 
-        }
+    }
 
-        function LogOut(controlDiv, map) {
+    function LogOut(controlDiv, map) {
             var controlUI = document.createElement('img');
             controlUI.src = "";
             controlUI.title = 'Logout';
-        }
+    }
 
-        // Setup Google Map
-        var pos, lastMarker;
-        var creatingNewEvent = false;
-        function initMap() {
-            var uluru = { lat: 41.1411794353, lng: -81.3383786465 };
-            var marker;
-            var geocoder;
-            var address;
-            var map = new google.maps.Map(
-                document.getElementById('map'), {
-                    zoom: 17,
-                    center: uluru,
-                    disableDefaultUI: true
-                });
-            var centerControlDiv = document.createElement('div');
-            new CenterControl(centerControlDiv, map);
-
-            centerControlDiv.index = 1;
-            map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-
-            geocoder = new google.maps.Geocoder();
-
-            // Setting up event markers
-            for (var i = 0; i < events.length; i++) {
-                var event = events[i];
-                codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description);
-            }
-
-            // Center map on user's location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    var youLoc = new google.maps.Marker({
-                        position: pos,
-                        map: map,
-                        title: 'Your Location',
-                        icon: "http://i66.tinypic.com/2hqt0fp.png"
-                    });
-
-                    // Called when creating an event and clicking the map
-                    map.addListener('click', function (event) {
-                        if (creatingNewEvent) {
-                            if (lastMarker != null) lastMarker.setMap(null);
-                            geocoder.geocode({ 'latLng': event.latLng }, function (results, status) {
-                                if (status === 'OK') {
-                                    marker = new google.maps.Marker({
-                                        map: map,
-                                        position: results[0].geometry.location,
-                                        icon: "http://i68.tinypic.com/2wojejb.png"
-                                    });
-                                    lastMarker = marker;
-                                    $('input[type = text][name = Location]').val(results[0].formatted_address);
-                                }
-                            });
-                        }
-                    });
-
-                    // Icon images
-                    //blue icon http://i68.tinypic.com/2wojejb.png
-                    //red icon http://i63.tinypic.com/242aqh3.png
-                    //green icon http://i66.tinypic.com/14u84ci.png
-
-                    //service icon http://i66.tinypic.com/2wpo45i.png
-                    //educational icon http://i66.tinypic.com/2hqt0fp.png
-                    //culture icon http://i63.tinypic.com/29e6j46.png
-                    //media icon http://i64.tinypic.com/2quunf4.png
-
-                    $('input[type=radio][name=iconType]').change(function () {
-                        if (this.value == 'blue') {
-                            lastMarker.setIcon("http://i68.tinypic.com/2wojejb.png");
-                        }
-                        else if (this.value == 'red') {
-                            lastMarker.setIcon("http://i63.tinypic.com/242aqh3.png");
-                        }
-                        else if (this.value == 'green') {
-                            lastMarker.setIcon("http://i66.tinypic.com/14u84ci.png");
-                        }
-                        else if (this.value == 'service') {
-                            lastMarker.setIcon("http://i66.tinypic.com/2wpo45i.png");
-                        }
-                        else if (this.value == 'educational') {
-                            lastMarker.setIcon("http://i66.tinypic.com/2hqt0fp.png");
-                        }
-                        else if (this.value == 'culture') {
-                            lastMarker.setIcon("http://i63.tinypic.com/29e6j46.png");
-                        }
-                        else if (this.value == 'media') {
-                            lastMarker.setIcon("http://i64.tinypic.com/2quunf4.png");
-                        }
-                    });
-
-                    $('input[type=text][name=Location]').blur(function () {
-                        address = $('input[type = text][name = Location]').val();
-                        codeAddress(geocoder, map, address, null, null, null, null, null, null, null);
-                    });
-
-                    infoWindow = new google.maps.InfoWindow;
-                    map.setCenter(pos);
-
-                    youLoc.addListener('mouseover', function () {
-                        infoWindow.setPosition(pos);
-                        infoWindow.setContent("Your current location");
-                        infoWindow.open(map);
-                    });
-                    
-                    youLoc.addListener('mouseout', function () {
-                        infoWindow.close();
-                    });
-
-                }, function () {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                });
-            } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, infoWindow, map.getCenter());
-            }
-        }
-
-        // Center map on address and place marker
-        function codeAddress(geocoder, map, address) {
-            geocoder.geocode({ 'address': address }, function (results, status) {
-                if (status === 'OK') {
-                    if (creatingNewEvent) {
-                        map.setCenter(results[0].geometry.location);
-                        new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location,
-                            icon: "http://i68.tinypic.com/2wojejb.png"
-                        });
-                    }
-                    else {
-                        var marker = new google.maps.Marker({
-                            map: map,
-                            position: results[0].geometry.location,
-                            title: `${name}\n${date} ${startTime} - ${endTime}\n${address} - ${roomNumber}\n${cost}`,
-                            icon: "http://i68.tinypic.com/2wojejb.png"
-                        });
-
-                        marker.addListener('click', function () {
-                            if ($('.collapse').css('display') === "none") {
-                                $('.collapse').show();
-                            }
-                            document.getElementById('name').innerHTML = name;
-                            document.getElementById('date').innerHTML = `${date}  ${startTime} - ${endTime}`;
-                            document.getElementById('desc').innerHTML = description;
-                        });
-                    }
-                } else {
-                    if (pos != null) map.setCenter(pos);
-                }
+    // Setup Google Map
+    var pos, lastMarker;
+    var creatingNewEvent = false;
+    var events = {{ listOfEvents| tojson}};
+    function initMap() {
+        var uluru = { lat: 41.1411794353, lng: -81.3383786465 };
+        var marker;
+        var geocoder;
+        var address;
+        var map = new google.maps.Map(
+            document.getElementById('map'), {
+                zoom: 17,
+                center: uluru,
+                disableDefaultUI: true
             });
+        var centerControlDiv = document.createElement('div');
+        new CenterControl(centerControlDiv, map);
+
+        centerControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+        geocoder = new google.maps.Geocoder();
+
+        // Setting up event markers
+        for (var i = 0; i < events.length; i++) {
+            var event = events[i];
+            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description);
         }
 
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(browserHasGeolocation ?
-                'Error: The Geolocation service failed.' :
-                'Error: Your browser doesn\'t support geolocation.');
-            infoWindow.open(map);
+        // Center map on user's location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: 'Your Location',
+                    icon: "http://i66.tinypic.com/2hqt0fp.png"
+                });
+
+                // Called when creating an event and clicking the map
+                map.addListener('click', function (event) {
+                    if (creatingNewEvent) {
+                        if (lastMarker != null) lastMarker.setMap(null);
+                        geocoder.geocode({ 'latLng': event.latLng }, function (results, status) {
+                            if (status === 'OK') {
+                                marker = new google.maps.Marker({
+                                    map: map,
+                                    position: results[0].geometry.location,
+                                    icon: "http://i68.tinypic.com/2wojejb.png"
+                                });
+                                lastMarker = marker;
+                                $('input[type = text][name = Address]').val(results[0].formatted_address);
+                            }
+                        });
+                    }
+                });
+
+                //Icon images
+                //blue icon http://i68.tinypic.com/2wojejb.png
+                //red icon http://i63.tinypic.com/242aqh3.png
+                //green icon http://i66.tinypic.com/14u84ci.png
+
+                //service icon http://i66.tinypic.com/2wpo45i.png
+                //educational icon http://i66.tinypic.com/2hqt0fp.png
+                //culture icon http://i63.tinypic.com/29e6j46.png
+                //media icon http://i64.tinypic.com/2quunf4.png
+
+                $('input[type=radio][name=iconType]').change(function () {
+                    if (this.value == 'blue') {
+                        lastMarker.setIcon("http://i68.tinypic.com/2wojejb.png");
+                    }
+                    else if (this.value == 'red') {
+                        lastMarker.setIcon("http://i63.tinypic.com/242aqh3.png");
+                    }
+                    else if (this.value == 'green') {
+                        lastMarker.setIcon("http://i66.tinypic.com/14u84ci.png");
+                    }
+                    else if (this.value == 'service') {
+                        lastMarker.setIcon("http://i66.tinypic.com/2wpo45i.png");
+                    }
+                    else if (this.value == 'educational') {
+                        lastMarker.setIcon("http://i66.tinypic.com/2hqt0fp.png");
+                    }
+                    else if (this.value == 'culture') {
+                        lastMarker.setIcon("http://i63.tinypic.com/29e6j46.png");
+                    }
+                    else if (this.value == 'media') {
+                        lastMarker.setIcon("http://i64.tinypic.com/2quunf4.png");
+                    }
+                });
+
+                $('input[type=text][name=Address]').blur(function () {
+                    address = $('input[type = text][name = Address]').val();
+                    codeAddress(geocoder, map, address, null, null, null, null, null, null, null);
+                });
+
+                infoWindow = new google.maps.InfoWindow;
+                map.setCenter(pos);
+
+                youLoc.addListener('mouseover', function () {
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent("Your current location");
+                    infoWindow.open(map);
+                });
+                
+                youLoc.addListener('mouseout', function () {
+                    infoWindow.close();
+                });
+
+            }, function () {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
         }
+    }
 
-        // Close sidebar when button is clicked
-        function closeCollapse() {
-            console.log("Running");
-            $('.collapse').hide();
-        };
+    // Place marker at address
+    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === 'OK') {
+                if (creatingNewEvent) {
+                    map.setCenter(results[0].geometry.location);
+                    new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        icon: "http://i68.tinypic.com/2wojejb.png"
+                    });
+                }
+                else {
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        title: `${name}\n${date} ${startTime} - ${endTime}\n${address} - ${roomNumber}\n${cost}`,
+                        icon: "http://i68.tinypic.com/2wojejb.png"
+                    });
 
-    </script>
-    <script link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHKAM4MJjVrNKZywhylS9BLdLsFF-tH0c&callback=initMap" type="text/javascript"></script>
+                    marker.addListener('click', function () {
+                        if ($('.collapse').css('display') === "none") {
+                            $('.collapse').show();
+                        }
+                        document.getElementById('name').innerHTML = name;
+                        document.getElementById('date').innerHTML = `${date}  ${startTime} - ${endTime}`;
+                        document.getElementById('desc').innerHTML = description;
+                    });
+                }
+            } else {
+                if (pos != null) map.setCenter(pos);
+            }
+        });
+    }
 
-    {% endblock %}
+    function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+            'Error: The Geolocation service failed.' :
+            'Error: Your browser doesn\'t support geolocation.');
+        infoWindow.open(map);
+    }
 
-    {% endblock %}
+    // Close sidebar when button is clicked
+    function closeCollapse() {
+        console.log("Running");
+        $('.collapse').hide();
+    };
+
+</script>
+<script link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHKAM4MJjVrNKZywhylS9BLdLsFF-tH0c&callback=initMap" type="text/javascript"></script>
+
+{% endblock %}
+
+{% endblock %}
