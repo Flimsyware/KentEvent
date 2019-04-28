@@ -5,11 +5,7 @@ from flaskr.Database.UserDB import UserDB,CreateUserTableText
 from flaskr.Database.EventDB import EventDB,CreateEventTableText
 from flaskr.SessionGlobals import *
 
-
-
-
-
-class DBHelper:
+class _DBHelper:
     selectAll = "*"
     DUPLICATE_EMAIL_ERROR = "Duplicate email error for registration."
     INVALID_EMAIL_ERROR = "Input is not an email."
@@ -134,3 +130,11 @@ class DBHelper:
 
 
         print("Testing successful")
+
+_cachedHelper = None
+
+def getDbHelper():
+    global _cachedHelper
+    if _cachedHelper == None:
+        _cachedHelper = _DBHelper()
+    return _cachedHelper

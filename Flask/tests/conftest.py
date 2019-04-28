@@ -3,31 +3,63 @@ import tempfile
 
 import pytest
 from flaskr import create_app
-from flaskr.db import DBHelper
 
-@pytest.fixture
-def app():
-    db_fd, db_path = ':memory:'
+_cachedApp = None
 
-    app = create_app({
-        'TESTING': True,
-        'DATABASE': db_path,
-    })
+def getApp():
+    global _cachedApp
+    if _cachedApp is None:
+        db_path = ':memory:'
 
-    with app.app_context():
-        DBHelper()
+        _cachedApp = create_app({
+            'TESTING': True,
+            'DATABASE': db_path,
+        })
 
-    yield app
+    return _cachedApp
 
-    os.close(db_fd)
-    os.unlink(db_path)
+def getClient():
+    return getApp().test_client()
 
+def getRunner():
+    return getApp().test_cli_runner()
 
-@pytest.fixture
-def client(app):
-    return app.test_client()
+class RouteActions():
+    def __init__(self):
+        self._client = getClient()
 
+    def landingPage(self):
+        return self._client.get(
+            '/'
+        )
 
-@pytest.fixture
-def runner(app):
-    return app.test_cli_runner()
+    def loginPage(self):
+        return self._client.get(
+            '/login'
+        )
+
+    def loginAction(self, email, password):
+        return self._client.post(
+            '/login',
+            data={'email': email, 'password': password}
+        )
+
+    def registerPage(self):
+        return self._client.get(
+            '/register'
+        )
+
+    def registerAction(self, email, password):
+        return self._client.post(
+            '/register',
+            data={'email': email, 'password': password}
+        )
+
+    def creator(self):
+        return self._client.get('/creator')
+
+    def user(self):
+        return self._client.get('/user')
+
+    def events(self):
+        return self._client.get('/events')

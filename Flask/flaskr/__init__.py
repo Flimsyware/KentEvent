@@ -1,7 +1,7 @@
 import os
 from flask import Flask , render_template, request,session,redirect
 from flask_bootstrap import Bootstrap
-from flaskr.db import DBHelper
+from flaskr.db import getDbHelper
 from flaskr.Database.UserDB import UserDB
 from flaskr.SessionGlobals import *
 
@@ -22,7 +22,7 @@ def create_app(test_config=None):
 
     #Database
     with app.app_context():
-        dbHelper = DBHelper()
+        dbHelper = getDbHelper()
 
     # ensure the instance folder exists
     try:
@@ -48,9 +48,10 @@ def create_app(test_config=None):
     def Login():
         print("Post Login")
         result = dbHelper.Login(str(request.form['email']),str(request.form['password']))
-        print(session[SessLoggedIn])
 
-        if result == DBHelper.LOGIN_SUCCESS:
+        print(result)
+
+        if result == dbHelper.LOGIN_SUCCESS:
             return redirect("/events")
         else:
             return render_template("login.html",loginCheck =result)
