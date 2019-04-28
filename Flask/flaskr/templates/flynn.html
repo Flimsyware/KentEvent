@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div id="dino"></div>
-<button onclick="jump()">Jump!</button>
+<h1><img id = "flynn" src = "https://cdn.discordapp.com/attachments/494316263972012044/571868467158974503/flynn.png"></h1>
+<p><b>Flynn is the Flimsyware fish and he has come to say hello<br>with some fun facts about the Flimsyware team!</b></p>
+<img src = "https://cdn.discordapp.com/attachments/494316263972012044/568158514577539102/flynn.png" onclick = "jump()" id="dino">
 
 {%block script%}
 <script>
@@ -57,61 +57,35 @@ function doGravity() {
 // function every 10 milliseconds
 setInterval(tick, 10)
 
-
-
-//
-// THIS IS THE OBSTACLE CODE. OMIT THIS IF YOU NEED TO SIMPLIFY THIS LESSON
-// 
-
-var obstacle;             // References the current object
-var obstaclePos = -11;    // References the object's position, in % of the screen
-                          // away from the left hand side
-                          // (Set to -11 to trigger the 'new object' case)
-
-// This function will make a new object appear to the right of the screen,
-// make it move all the way across, and then make another one. 
-function obstacleTick() {
-  // If the current object is all the way to the left of the screen, we need
-  // a new object to take its place
-  if (obstaclePos < -10) {
-    // First, we create a new div.
-    obstacle = document.createElement("div");
-    // Next, we give it the class 'block' (See the CSS)
-    obstacle.className = 'block';
-    // Finally, we can attach it to the body of our HTML
-    document.body.appendChild(obstacle);
-    // And then set it's position to 110% away from the left of the screen
-    // (Making it appear 10% outside of the screen to the right)
-    obstaclePos = 110;
-  } else {
-    // If the object isn't completely to the right, we need to display it's position
-    // by setting the 'left' attribute.
-    obstacle.style.left = obstaclePos + '%';
-    // Then, to make it move left, we subtract a small amount from it's distance
-    // from the left of the screen. 
-    obstaclePos -= .2;
-  }
-}
 </script>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 {%block style%}
 <style>
+#flynn{
+margin-left:550px;
+}
+
 #dino {
-  width: 30px;
-  height: 30px;
-  background: black;
+  width: 250px;
+  height: 200px;
   position: absolute;
+  margin-left: 750px;
+  margin-bottom:300px;
+  margin-right: auto;
 }
 
-.block {
-  width: 50px;
-  height: 50px;
-  background: blue;
-  position: absolute;
-  bottom: 0px;
+p{
+text-align:center;
+font-size: 25px;
+font-family:Roboto;
 }
 
-
+body{
+  background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/571876539658928143/backgroundhelp.png");
+  background-repeat:no-repeat;
+  background-size: cover;
+}
 </style>
 
 {% endblock %}
