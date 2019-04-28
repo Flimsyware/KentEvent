@@ -3,7 +3,9 @@ from flask import Flask , render_template, request,session,redirect
 from flask_bootstrap import Bootstrap
 from flaskr.db import getDbHelper
 from flaskr.Database.UserDB import UserDB
+from flaskr.Database.EventDB import EventDB
 from flaskr.SessionGlobals import *
+import datetime
 
 def create_app(test_config=None):
     # create and configure the app
@@ -37,6 +39,10 @@ def create_app(test_config=None):
     def Landing():
         return render_template("landing.html")
 
+   # Game page
+    @app.route('/flynn')
+    def Fish():
+        return render_template("flynn.html")
 
     #Login page =============
     @app.route('/login',methods=['GET'])
@@ -76,12 +82,33 @@ def create_app(test_config=None):
     #Profile for creator 
     @app.route('/creator')
     def Creator():
-        return render_template("auth/creator.html")
+        listOfEvents = dbHelper.getAllEvent()
+        ##listOfEvents = [eventDic1,eventDic2]
+        return render_template("auth/creator.html", listOfEvents = listOfEvents)
+
+    @app.route('/creator', methods=["POST"])
+    def CreatorPost():
+        event = EventDB()
+        event.name = request.form[EventDB.dbName]
+        event.description = request.form[EventDB.dbDescription]
+        event.address = request.form[EventDB.dbAddress]
+        event.creatorID = session[SessUserID]
+        event.startTime = request.form[EventDB.dbStartTime]
+        event.endTime = request.form[EventDB.dbEndTime]
+        event.date = request.form[EventDB.dbDate]
+        event.creationDate = datetime.datetime.now().strftime("%Y-%m-%d")
+        event.creationTime = datetime.datetime.now().strftime("%H:%M")
+
+        dbHelper.AddEvent(event)
+
+        return Creator()
+
 
     #Profile for user
     @app.route('/user')
     def User():
-        return render_template("user/user.html")
+        listOfEvents = dbHelper.getAllEvent()
+        return render_template("user/user.html", listOfEvents = listOfEvents)
 
     #Events page
     @app.route('/events')
@@ -97,6 +124,16 @@ def create_app(test_config=None):
                 print("Admin")
                 return redirect("/events")
 
-        return render_template("events.html")
+        listOfEvents = dbHelper.getAllEvent()
+        return render_template("events.html", listOfEvents = listOfEvents)
+
+
+    @app.route('/logout')
+    def Logout():
+        session.clear()
+        return Landing()
+
+    
 
     return app
+

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1><img id = "flynn" src = "https://cdn.discordapp.com/attachments/494316263972012044/571868467158974503/flynn.png"></h1>
+<p><b>Flynn is the Flimsyware fish and he has come to say hello<br>with some fun facts!</b></p>
+<img src = "https://cdn.discordapp.com/attachments/494316263972012044/568158514577539102/flynn.png" onclick = "jump()" id="dino">
+
+<div id = "Fact1"><b>Fact #1</b><br>Kent State has over 400 student organizations!</div>
+<div id ="Fact2"><b>Fact #2</b><br>The first student organization was founded in </div>
+<div id = "Fact3"><b>Fact #3</b><br>Flynn the Flimsyware fish was almost Flynn the Flimsyware frog!</div>
+<div id = "Fact4"><b>Fact #4</b><br>Flynn is modeled after a goldfish, which can live up to 5 to 10 years</div>
+<div id = "Fact5"><b>Fact #5</b><br>There are over 33,000 species of fish</div>
+
+
+{%block script%}
+<script>
+var y = 0;      // Our player's current position
+var yVel = 0;   // Our player's acceleration, upwards or down
+
+var jumpHeight = 5;     // how high our player jumps
+
+                // our player's character
+var dino = document.getElementById('dino');
+
+// This function will be called when we click the button
+function jump() {
+  // This if statement checks to see if we're less than 2 pixels 
+  // from the ground
+  if (y < 2) {
+    // If we're grounded, let's set our upward acceleration to
+    // our jump height!
+     yVel = jumpHeight;
+  }
+}
+
+// This function will happen once every 10 milliseconds 
+// (See the bottom of the code)
+function tick() {
+  // We add the amount we're accelerating by to our current
+  // position
+  y += yVel;
+  // We set our current position to the css attribute 'bottom',
+  // corresponding to how many pixels we are above the bottom of the page
+  dino.style.bottom = y + 'px'
+  // We call our gravity function
+  doGravity();
+  // We call the obstacle handler
+  obstacleTick();   // NOTE - omit this function if it's too complicated!
+}
+
+// This function will make the player fall
+// UNLESS the player is grounded
+function doGravity() {
+  // If we're above the ground, decrease our yVel by the pull of gravity
+  if (y > 0) {
+     yVel -= .1;
+    // Otherwise, ensure we don't have negative yVel by setting it to 0
+  } else {
+    yVel = 0;
+  }
+}
+
+// Finally, to run our game, we call the tick()
+// function every 10 milliseconds
+setInterval(tick, 10)
+
+</script>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+{%block style%}
+<style>
+#Fact1{
+position: relative;
+border: solid black;
+display: block;
+border-radius:25px;
+text-align: center;
+height: 110px;
+width: 150px;
+margin-left:500px;
+background: rgb(130, 170, 240);
+}
+
+#Fact2{
+position: relative;
+border: solid black;
+display: block;
+border-radius:25px;
+text-align: center;
+height: 110px;
+width: 150px;
+margin-left:1200px;
+background: rgb(130, 170, 240);
+}
+
+#Fact3{
+position: relative;
+border: solid black;
+display: block;
+border-radius:25px;
+text-align: center;
+height: 110px;
+width: 150px;
+margin-left: 300px;
+background: rgb(130, 170, 240);
+}
+
+#Fact4{
+position: relative;
+border: solid black;
+display: block;
+border-radius:25px;
+text-align: center;
+height: 110px;
+width: 150px;
+margin-left:1300px;
+background: rgb(130, 170, 240);
+}
+
+#Fact5{
+position:relative;
+border: solid black;
+display: block;
+border-radius:25px;
+text-align: center;
+height: 110px;
+width: 150px;
+margin-left:150px;
+background: rgb(130, 170, 240);
+}
+
+
+
+#flynn{
+margin-left:550px;
+}
+
+#dino {
+  width: 250px;
+  height: 200px;
+  position: absolute;
+  margin-left: 750px;
+  margin-bottom:240px;
+  margin-right: auto;
+}
+
+p{
+text-align:center;
+font-size: 25px;
+font-family:Roboto;
+}
+
+body{
+  background-image: url("https://cdn.discordapp.com/attachments/494316263972012044/564898563696361509/background.png");
+}
+</style>
+
+{% endblock %}
+{% endblock %}
+{% endblock %}

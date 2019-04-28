@@ -1,4 +1,4 @@
-{% extends "bootstrap/base.html" %}
+{% extends 'base.html' %}
 
 <!-- Setup doc -->
 {% block html_attribs %} lang="en" class="h-100" {% endblock %}
@@ -12,14 +12,30 @@
 <!-- Setup body -->
 {% block body_attribs %} class="h-100" {% endblock %}
 {% block body %}
-
+{% block navbar %}
+   <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <ul class="nav navbar-nav navbar-right">
+            <li><form><input class="btn btn-primary" type="submit" value="Logout"></form></li>  
+          </ul>
+        </div>
+    </nav>
+{%endblock%}
 
 <!-- Main content of page -->
 <div class="row h-100 text-center">
     <!-- Sidebar -->
 
-    <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#5CB9DD; width:500px;">
-        <div class="col" style="width:500px;"><h3>Kent Event</h3></div>
+    <div class="col-2 h-100 border-right border-dark collapse" id="sidebar" style="background-color:#5CB9DD; width:500px; overflow:scroll;">
+        <div class="col" style="width:500px;">
+            <button onclick="closeCollapse()" class="close float-right">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <br />
+            <h3 id="name">Kent Event</h3>
+            <p id="date"><b>date - time</b></p>
+            <p id="desc">desc</p>
+        </div>
     </div>
     <!-- Map -->
     <div class="col" id="map"></div>
@@ -27,22 +43,22 @@
 
 {% block style %}
 <style>
+    input[type=submit]{
+     margin-left:1200px;
+    }
  
 </style>
 {% endblock %}
 {% block scripts %}
 
-<script>
+<script type="text/javascript">
 
     // Setup Google Map
-    var pos, lastMarker;
+    var pos, lastMarker, geocoder;
     var creatingNewEvent = false;
+    var events = {{ listOfEvents| tojson}};
     function initMap() {
         var uluru = { lat: 41.1411794353, lng: -81.3383786465 };
-        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-        var marker;
-        var geocoder;
-        var address;
         var map = new google.maps.Map(
             document.getElementById('map'), {
                 zoom: 17,
@@ -50,6 +66,12 @@
                 disableDefaultUI: true
             });
         geocoder = new google.maps.Geocoder();
+
+        // Setting up event markers
+        for (var i = 0; i < events.length; i++) {
+            var event = events[i];
+            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description);
+        }
 
         // Center map on user's location
         if (navigator.geolocation) {
@@ -61,14 +83,9 @@
                 var marker = new google.maps.Marker({
                     position: pos,
                     map: map,
-                    title: 'Your guy',
+                    title: 'Your Location',
                     icon: "http://i66.tinypic.com/2hqt0fp.png"
                 });
-
-                // Called when clicking on an event marker
-                //marker.addListener('click', function () {
-                //    $('.collapse').toggle();
-                //});
 
                 //blue icon http://i68.tinypic.com/2wojejb.png
                 //red icon http://i63.tinypic.com/242aqh3.png
@@ -99,7 +116,39 @@
         infoWindow.open(map);
     }
 
+    // Place marker at address
+    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === 'OK') {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    title: `${name}\n${date} ${startTime} - ${endTime}\n${address} - ${roomNumber}\n${cost}`,
+                    icon: "http://i68.tinypic.com/2wojejb.png"
+                });
+
+                marker.addListener('click', function () {
+                    if ($('.collapse').css('display') === "none") {
+                        $('.collapse').show();
+                    }
+                    document.getElementById('name').innerHTML = name;
+                    document.getElementById('date').innerHTML = `${date}  ${startTime} - ${endTime}`;
+                    document.getElementById('desc').innerHTML = description;
+                });
+            } else {
+                if (pos != null) map.setCenter(pos);
+            }
+        });
+    }
+
+    // Close sidebar when button is clicked
+    function closeCollapse() {
+        console.log("Running");
+        $('.collapse').hide();
+    };
+
 </script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <script link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

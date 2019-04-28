@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Database",
     "\\templates",
+    "\\templates\\auth",
     "\\templates\\user"
   ],
-  "SelectedNode": "\\templates\\events.html",
+  "SelectedNode": "\\templates\\base.html",
   "PreviewInSolutionExplorer": false
 }
