@@ -23,7 +23,6 @@ class _DBHelper:
         )
         self.c = self.conn.cursor()
         self.__CreateTablesIfNotExists__()
-        self.__AddTestableInformationToDatabase__()
         self.__DatabaseTestingFunction__()
 
     def __CreateTablesIfNotExists__(self):

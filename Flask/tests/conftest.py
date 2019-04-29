@@ -14,15 +14,24 @@ def getApp():
         _cachedApp = create_app({
             'TESTING': True,
             'DATABASE': db_path,
+            'SECRET_KEY': 'testing',
         })
 
     return _cachedApp
 
+_cachedClient = None
 def getClient():
-    return getApp().test_client()
+    global _cachedClient
+    if _cachedClient is None:
+        _cachedClient = getApp().test_client()
+    return _cachedClient
 
+_cachedRunner = None
 def getRunner():
-    return getApp().test_cli_runner()
+    global _cachedRunner
+    if _cachedRunner is None:
+        _cachedRunner = getApp().test_cli_runner()
+    return _cachedRunner
 
 class RouteActions():
     def __init__(self):
@@ -49,10 +58,14 @@ class RouteActions():
             '/register'
         )
 
-    def registerAction(self, email, password):
+    def registerAction(self, email, password, userType):
         return self._client.post(
             '/register',
-            data={'email': email, 'password': password}
+            data={
+                'email': email,
+                'password': password,
+                'userType': userType
+            }
         )
 
     def creator(self):
