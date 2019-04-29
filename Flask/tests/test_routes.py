@@ -70,19 +70,8 @@ class TestRoutes(TestCase):
             assert SessUserID not in session
             assert SessUserType not in session
 
-    # registration should save new user credentials if they do not exist
-    def test_registration(self):
-        email = 'testing123@gmail.com'
-        password = 'password'
-        role = 'All-powerful test user'
-
-        result = self.routeActions.registerAction(email, password, role)
-
-        self.assert_template_used("register.html")
-        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_SUCCESS)
-
     def test_registration_success_on_valid_creator_email(self):
-        email = 'name@kent.edu'
+        email = 'testing123@kent.edu'
         password = 'password'
         role = 'creator'
 
@@ -92,7 +81,7 @@ class TestRoutes(TestCase):
         self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_SUCCESS)
 
     def test_registration_fail_on_duplicate_email(self):
-        email = 'testing123@gmail.com'
+        email = 'testing123@kent.edu'
         password = 'password'
         role = 'All-powerful test user'
 
