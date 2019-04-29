@@ -69,7 +69,7 @@
         // Setting up event markers
         for (var i = 0; i < events.length; i++) {
             var event = events[i];
-            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description);
+            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description,event.PinStyle);
         }
 
         // Center map on user's location
@@ -116,14 +116,18 @@
     }
 
     // Place marker at address
-    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description) {
+    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description,pinStyle) {
+        if (pinStyle == null)
+        {
+            pinStyle = "http://i68.tinypic.com/2wojejb.png";
+        }
         geocoder.geocode({ 'address': address }, function (results, status) {
             if (status === 'OK') {
                 var marker = new google.maps.Marker({
                     map: map,
                     position: results[0].geometry.location,
                     title: `${name}\n${date} ${startTime} - ${endTime}\n${address} - ${roomNumber}\n${cost}`,
-                    icon: "http://i68.tinypic.com/2wojejb.png"
+                    icon: pinStyle
                 });
 
                 marker.addListener('click', function () {

@@ -12,6 +12,7 @@ CreateEventTableText = """
         CreationTime time NOT NULL,
         Cost int,
         RoomNumber int,
+        PinStyle varchar(255),
         FOREIGN KEY (CreatorID) REFERENCES User(ID)
     )
 """
@@ -34,6 +35,7 @@ class EventDB:
     dbCreationTime = "CreationTime"
     dbCost = "Cost"
     dbRoomNumber = "RoomNumber"
+    dbPinStyle = "PinStyle"
     
     def __init__(self):
         self.ID = None
@@ -49,3 +51,4 @@ class EventDB:
         self.creationTime = None
         self.cost = None
         self.roomNumber = None
+        self.pinStyle = None

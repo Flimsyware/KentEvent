@@ -26,6 +26,8 @@ class _DBHelper:
         self.__DatabaseTestingFunction__()
 
     def __CreateTablesIfNotExists__(self):
+        #self.c.execute("Drop Table Event;")
+        #self.conn.commit()
         self.c.execute(CreateUniversityTableText)
         self.c.execute(CreateUserTableText)
         self.c.execute(CreateEventTableText)
@@ -131,19 +133,20 @@ class _DBHelper:
             return self.EVENT_CREATION_MISSING_FIELD
         if eventDB.creationTime == None:
             return self.EVENT_CREATION_MISSING_FIELD
+        
 
 
         
         eventArgs = (
             eventDB.name, eventDB.creatorID, eventDB.address,\
             eventDB.description, eventDB.startTime, eventDB.endTime, eventDB.date, eventDB.creationDate,\
-            eventDB.creationTime, eventDB.cost, eventDB.roomNumber)
+            eventDB.creationTime, eventDB.cost, eventDB.roomNumber,eventDB.pinStyle)
 
-        text = "Insert into {} ({},{},{},{},{},{},{},{},{},{},{}) values (?,?,?,?,?,?,?,?,?,?,?)".format(EventDB.tableName,\
+        text = "Insert into {} ({},{},{},{},{},{},{},{},{},{},{},{}) values (?,?,?,?,?,?,?,?,?,?,?,?)".format(EventDB.tableName,\
             EventDB.dbName, EventDB.dbCreatorID,EventDB.dbAddress,\
             EventDB.dbDescription, EventDB.dbStartTime, EventDB.dbEndTime, EventDB.dbDate, EventDB.dbCreationDate,\
-            EventDB.dbCreationTime, EventDB.dbCost, EventDB.dbRoomNumber)
-        self.c.execute(text,eventArgs )
+            EventDB.dbCreationTime, EventDB.dbCost, EventDB.dbRoomNumber,EventDB.dbPinStyle)
+        self.c.execute(text,eventArgs)
         self.conn.commit()
         
 
