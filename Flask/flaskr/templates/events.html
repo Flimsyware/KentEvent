@@ -77,6 +77,7 @@
     // Setup Google Map
     var pos, lastMarker;
     var creatingNewEvent = false;
+    var events = {{ listOfEvents| tojson}};
     function initMap() {
         var uluru = { lat: 41.1411794353, lng: -81.3383786465 };
         var marker;
@@ -91,7 +92,7 @@
         // Setting up event markers
         for (var i = 0; i < events.length; i++) {
             var event = events[i];
-            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description);
+            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description, event.pinStyle);
         }
 
         // Center map on user's location
@@ -133,16 +134,6 @@
             handleLocationError(false, infoWindow, map.getCenter());
         }
 
-        map.addListener('mouseover', function () {
-            infowindow.setContent("Your current location");
-            infowindow.open(map);
-        });
-
-        // assuming you also want to hide the infowindow when user mouses-out
-        marker.addListener('mouseout', function () {
-            infowindow.close();
-        });
-
     }
 
     function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -154,14 +145,14 @@
     }
 
     // Place marker at address
-    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description) {
+    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description, pinStyle) {
         geocoder.geocode({ 'address': address }, function (results, status) {
             if (status === 'OK') {
                 var marker = new google.maps.Marker({
                     map: map,
                     position: results[0].geometry.location,
                     title: `${name}\n${date} ${startTime} - ${endTime}\n${address} - ${roomNumber}\n${cost}`,
-                    icon: "http://i68.tinypic.com/2wojejb.png"
+                    icon: pinStyle
                 });
 
                 marker.addListener('click', function () {

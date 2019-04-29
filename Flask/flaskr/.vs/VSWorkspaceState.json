@@ -6,6 +6,6 @@
     "\\templates\\auth",
     "\\templates\\user"
   ],
-  "SelectedNode": "\\__init__.py",
+  "SelectedNode": "\\Database\\UserDB.py",
   "PreviewInSolutionExplorer": false
 }
