@@ -33,7 +33,10 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             <br />
-            <h3>Kent Event</h3>
+            <h3 id="name"></h3>
+            <p id="date"><b></b></p>
+            <p id="desc"></p>
+            <br />
             <div id="eventForm" style="display:none;">
                 <form id="inForm" method="post">
                     <label>Event Name:*</label>
@@ -128,9 +131,14 @@
         // Setup the click event listeners
         controlUI.addEventListener('click', function () {
             var x = document.getElementById("eventForm");
+            if ($('.collapse').css('display') === "none")
+                $('.collapse').show();
             if (x.style.display == "none") {
                 x.style.display = "block";
                 creatingNewEvent = true;
+                document.getElementById('name').innerHTML = "";
+                document.getElementById('date').innerHTML = "";
+                document.getElementById('desc').innerHTML = "";
             }
             else {
                 x.style.display = "none";
@@ -138,7 +146,6 @@
                 $('input[type = text][name = Address]').val("");
                 if (lastMarker != null) lastMarker.setMap(null);
             }
-            $('.collapse').toggle();
         });
 
     }
@@ -251,16 +258,6 @@
 
                 infoWindow = new google.maps.InfoWindow;
                 map.setCenter(pos);
-
-                youLoc.addListener('mouseover', function () {
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent("Your current location");
-                    infoWindow.open(map);
-                });
-                
-                youLoc.addListener('mouseout', function () {
-                    infoWindow.close();
-                });
 
             }, function () {
                 handleLocationError(true, infoWindow, map.getCenter());
