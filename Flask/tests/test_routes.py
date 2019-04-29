@@ -182,7 +182,8 @@ class TestRoutes(TestCase):
             EventDB.dbAddress: 'address',
             EventDB.dbStartTime: 'start time',
             EventDB.dbEndTime: 'end time',
-            EventDB.dbDate: 'date'
+            EventDB.dbDate: 'date',
+            EventDB.dbPinStyle: 'pin style'
         }
 
         with getClient() as client:
@@ -201,7 +202,8 @@ class TestRoutes(TestCase):
                 eventAdded[EventDB.dbCreatorID] == 'creatorID' and
                 eventAdded[EventDB.dbStartTime] == 'start time' and
                 eventAdded[EventDB.dbEndTime]== 'end time' and
-                eventAdded[EventDB.dbDate] == 'date')
+                eventAdded[EventDB.dbDate] == 'date' and
+                eventAdded[EventDB.dbPinStyle] == 'pin style')
 
 
     def test_logout_should_clear_session_variables(self):
