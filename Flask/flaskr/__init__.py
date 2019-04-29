@@ -47,13 +47,15 @@ def create_app(test_config=None):
     #Login page =============
     @app.route('/login',methods=['GET'])
     def LoginGet():
+        if session[SessLoggedIn] == True:
+            return redirect("/events")
         print("Get Login")
         return render_template("login.html")
 
     @app.route('/login', methods=['POST'])
     def Login():
         print("Post Login")
-        result = dbHelper.Login(str(request.form['email']),str(request.form['password']))
+        result = dbHelper.Login(request.form.get('email',None),request.form.get('email',None))
 
         print(result)
 

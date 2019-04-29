@@ -186,9 +186,9 @@ class _DBHelper:
 
 
     def Login(self,email,password):
-        if email == None:
+        if email == None or not email:
             return self.LOGIN_FAILED
-        if password == None:
+        if password == None or not password:
             return self.LOGIN_FAILED
 
 
