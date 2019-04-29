@@ -104,7 +104,7 @@ def create_app(test_config=None):
         event.date = request.form[EventDB.dbDate]
         event.creationDate = datetime.datetime.now().strftime("%Y-%m-%d")
         event.creationTime = datetime.datetime.now().strftime("%H:%M")
-
+        event.pinStyle = request.form[EventDB.dbPinStyle]
         dbHelper.AddEvent(event)
 
         return Creator()
