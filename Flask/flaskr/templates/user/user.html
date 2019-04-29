@@ -13,13 +13,9 @@
 {% block body_attribs %} class="h-100" {% endblock %}
 {% block body %}
 {% block navbar %}
-   <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-          <ul class="nav navbar-nav navbar-right">
-            <li><form><input class="btn btn-primary" type="submit" value="Logout"></form></li>  
-          </ul>
-        </div>
-    </nav>
+    <div id = "bar" class="container-fluid">
+        <form><input id="logout" class="btn btn-primary" type="submit" value="Logout"></form>
+    </div>
 {%endblock%}
 
 <!-- Main content of page -->
@@ -43,8 +39,11 @@
 
 {% block style %}
 <style>
+    #bar{
+    background: #222222;
+    }
     input[type=submit]{
-     margin-left:1200px;
+     margin-left:1300px;
     }
  
 </style>
