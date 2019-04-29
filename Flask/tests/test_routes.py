@@ -42,14 +42,15 @@ class TestRoutes(TestCase):
         role = 'All-powerful test user'
         self.dbHelper.AddUser(UserDB(email,password,role))
         
-        with getClient() as c:
+        with getClient():
             session[SessLoggedIn] = False
             session[SessUserID] = None
             session[SessUserType] = None
 
-            #act
+            # act
             self.routeActions.loginAction(email, password)
 
+            # assert
             assert session[SessLoggedIn] is True
             assert session[SessUserID] is not None
             assert session[SessUserType] == role
