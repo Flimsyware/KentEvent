@@ -81,11 +81,12 @@ class TestRoutes(TestCase):
         self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_SUCCESS)
 
     def test_registration_fail_on_duplicate_email(self):
-        email = 'testing123@kent.edu'
+        email = 'testing1234@kent.edu'
         password = 'password'
         role = 'All-powerful test user'
 
-        result  = self.routeActions.registerAction(email, password, role)
+        self.routeActions.registerAction(email, password, role)
+        self.routeActions.registerAction(email, password, role)
 
         self.assert_template_used("register.html")
         self.assert_context("registrationCheck", self.dbHelper.DUPLICATE_EMAIL_ERROR)
@@ -100,20 +101,10 @@ class TestRoutes(TestCase):
         self.assert_template_used("register.html")
         self.assert_context("registrationCheck", self.dbHelper.INVALID_EMAIL_ERROR)
 
-    def test_registration_fail_on__email_empty(self):
-        email = None
+    def test_registration_fail_on_email_empty(self):
+        email = ''
         password = 'password'
-        role = 'All-powerful test user'
-
-        result = self.routeActions.registerAction(email, password, role)
-
-        self.assert_template_used("register.html")
-        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_FIELDS_INCOMPLETE)
-
-    def test_registration_fail_on__password_empty(self):
-        email = 'testing123@example.com'
-        password = None
-        role = 'All-powerful test user'
+        role = 'test user'
 
         result = self.routeActions.registerAction(email, password, role)
 
@@ -121,9 +112,9 @@ class TestRoutes(TestCase):
         self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_FIELDS_INCOMPLETE)
 
     def test_registration_fail_on__role_empty(self):
-        email = 'testing@example.com'
+        email = 'testing321@example.com'
         password = 'password'
-        role = None
+        role = ''
 
         result = self.routeActions.registerAction(email, password, role)
 
@@ -135,9 +126,10 @@ class TestRoutes(TestCase):
         password = 'password'
         role = 'creator'
 
-        result = self.routeActions.registerAction(email, password, role)
+        #result = self.routeActions.registerAction(email, password, role)
 
         self.assert_template_used("register.html")
         self.assert_context("registrationCheck", self.dbHelper.NOT_KENT_EMAIL_FOR_CREATOR)
+    
     
     
