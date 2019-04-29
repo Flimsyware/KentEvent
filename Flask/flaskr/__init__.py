@@ -47,13 +47,16 @@ def create_app(test_config=None):
     #Login page =============
     @app.route('/login',methods=['GET'])
     def LoginGet():
+        if session.get(SessLoggedIn) == True:
+            if(session[SessLoggedIn] == True):
+                return redirect("/events")
         print("Get Login")
         return render_template("login.html")
 
     @app.route('/login', methods=['POST'])
-    def Login():
+    def LoginPost():
         print("Post Login")
-        result = dbHelper.Login(str(request.form['email']),str(request.form['password']))
+        result = dbHelper.Login(request.form.get('email',None),request.form.get('password',None))
 
         print(result)
 
@@ -80,7 +83,7 @@ def create_app(test_config=None):
         return render_template("register.html")
 
     #Profile for creator 
-    @app.route('/creator')
+    @app.route('/creator', methods=['GET'])
     def Creator():
         listOfEvents = dbHelper.getAllEvent()
         ##listOfEvents = [eventDic1,eventDic2]
@@ -88,6 +91,9 @@ def create_app(test_config=None):
 
     @app.route('/creator', methods=["POST"])
     def CreatorPost():
+        if "logout" in request.form:
+            return Logout()
+
         event = EventDB()
         event.name = request.form[EventDB.dbName]
         event.description = request.form[EventDB.dbDescription]
@@ -110,6 +116,11 @@ def create_app(test_config=None):
         listOfEvents = dbHelper.getAllEvent()
         return render_template("user/user.html", listOfEvents = listOfEvents)
 
+    @app.route('/user', methods=["POST"])
+    def UserPost():
+        if "logout" in request.form:
+            return Logout()
+
     #Events page
     @app.route('/events')
     def Events():
@@ -131,7 +142,7 @@ def create_app(test_config=None):
     @app.route('/logout')
     def Logout():
         session.clear()
-        return Landing()
+        return redirect("/")
 
     
 
