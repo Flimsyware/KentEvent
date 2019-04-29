@@ -23,13 +23,22 @@ class TestRoutes(TestCase):
         
         self.assert_redirects(result, '/events')
 
+    def test_login_should_not_work_if_user_does_not_exist(self):
+        email = 'nonexistentUser@example.com'
+        password = 'not-a-real-password'
+        
+        result = self.routeActions.loginAction(email, password)
+        
+        self.assert_template_used("login.html")
+        self.assert_context("loginCheck", self.dbHelper.LOGIN_FAILED)
+
     # registration should save new user credentials if they do not exist
     def test_registration(self):
         email = 'testing123@gmail.com'
         password = 'password'
         role = 'All-powerful test user'
-        self.dbHelper.AddUser(UserDB(email, password, role))
 
-        result = self.routeActions.registerAction(email, password)
+        result = self.routeActions.registerAction(email, password, role)
 
-        self.assert_redirects(result, '/events')
+        self.assert_template_used("register.html")
+        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_SUCCESS)
