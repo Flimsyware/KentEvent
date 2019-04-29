@@ -121,12 +121,22 @@ class TestRoutes(TestCase):
         self.assert_template_used("register.html")
         self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_FIELDS_INCOMPLETE)
 
+    def test_registration_fail_on__password_empty(self):
+        email = 'testing321@example.com'
+        password = ''
+        role = 'user'
+
+        result = self.routeActions.registerAction(email, password, role)
+
+        self.assert_template_used("register.html")
+        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_FIELDS_INCOMPLETE)
+
     def test_registration_fail_on_invalid_creator_email(self):
         email = 'test@yahoo.com'
         password = 'password'
-        role = 'creator'
+        role = UserDB.dbRoleHost
 
-        #result = self.routeActions.registerAction(email, password, role)
+        result = self.routeActions.registerAction(email, password, role)
 
         self.assert_template_used("register.html")
         self.assert_context("registrationCheck", self.dbHelper.NOT_KENT_EMAIL_FOR_CREATOR)
