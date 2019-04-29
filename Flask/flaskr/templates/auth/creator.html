@@ -52,17 +52,17 @@
                     <label>Pick an icon:</label>
                     <table id="table">
                         <br>
-                        <input type="radio" name="iconType" value="blue" checked>Blue
+                        <input type="radio" name="PinStyle" value="http://i68.tinypic.com/2wojejb.png" checked>Blue
                         <br>
-                        <input type="radio" name="iconType" value="red">Red
+                        <input type="radio" name="PinStyle" value="http://i63.tinypic.com/242aqh3.png">Red
                         <br>
-                        <input type="radio" name="iconType" value="green">Green</br>
-                        <input type="radio" name="iconType" value="service">Service
+                        <input type="radio" name="PinStyle" value="http://i66.tinypic.com/14u84ci.png">Green</br>
+                        <input type="radio" name="PinStyle" value="http://i66.tinypic.com/2wpo45i.png">Service
                         <br>
-                        <input type="radio" name="iconType" value="educational">Educational
+                        <input type="radio" name="PinStyle" value="http://i66.tinypic.com/2hqt0fp.png">Educational
                         <br>
-                        <input type="radio" name="iconType" value="culture">Culture</br>
-                        <input type="radio" name="iconType" value="media">Media</br>
+                        <input type="radio" name="PinStyle" value="http://i63.tinypic.com/29e6j46.png">Culture</br>
+                        <input type="radio" name="PinStyle" value="http://i64.tinypic.com/2quunf4.png">Media</br>
                     </table>
                     <input class="btn btn-primary" type="submit" value="Submit"><br></br>
                 </form>
@@ -182,7 +182,7 @@
         // Setting up event markers
         for (var i = 0; i < events.length; i++) {
             var event = events[i];
-            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description);
+            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description, event.PinStyle);
         }
 
         // Center map on user's location
@@ -227,33 +227,13 @@
                 //culture icon http://i63.tinypic.com/29e6j46.png
                 //media icon http://i64.tinypic.com/2quunf4.png
 
-                $('input[type=radio][name=iconType]').change(function () {
-                    if (this.value == 'blue') {
-                        lastMarker.setIcon("http://i68.tinypic.com/2wojejb.png");
-                    }
-                    else if (this.value == 'red') {
-                        lastMarker.setIcon("http://i63.tinypic.com/242aqh3.png");
-                    }
-                    else if (this.value == 'green') {
-                        lastMarker.setIcon("http://i66.tinypic.com/14u84ci.png");
-                    }
-                    else if (this.value == 'service') {
-                        lastMarker.setIcon("http://i66.tinypic.com/2wpo45i.png");
-                    }
-                    else if (this.value == 'educational') {
-                        lastMarker.setIcon("http://i66.tinypic.com/2hqt0fp.png");
-                    }
-                    else if (this.value == 'culture') {
-                        lastMarker.setIcon("http://i63.tinypic.com/29e6j46.png");
-                    }
-                    else if (this.value == 'media') {
-                        lastMarker.setIcon("http://i64.tinypic.com/2quunf4.png");
-                    }
+                $('input[type=radio][name=PinStyle]').change(function () {
+                    lastMarker.setIcon(this.value);
                 });
 
                 $('input[type=text][name=Address]').blur(function () {
                     address = $('input[type = text][name = Address]').val();
-                    codeAddress(geocoder, map, address, null, null, null, null, null, null, null);
+                    codeAddress(geocoder, map, address, null, null, null, null, null, null, null,null);
                 });
 
                 infoWindow = new google.maps.InfoWindow;
@@ -269,7 +249,11 @@
     }
 
     // Place marker at address
-    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description) {
+    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description, pinStyle) {
+        if (pinStyle == null)
+        {
+            pinStyle = "http://i68.tinypic.com/2wojejb.png";
+        }
         geocoder.geocode({ 'address': address }, function (results, status) {
             if (status === 'OK') {
                 if (creatingNewEvent) {
@@ -277,7 +261,7 @@
                     new google.maps.Marker({
                         map: map,
                         position: results[0].geometry.location,
-                        icon: "http://i68.tinypic.com/2wojejb.png"
+                        icon: pinStyle
                     });
                 }
                 else {
@@ -285,7 +269,7 @@
                         map: map,
                         position: results[0].geometry.location,
                         title: `${name}\n${date} ${startTime} - ${endTime}\n${address} - ${roomNumber}\n${cost}`,
-                        icon: "http://i68.tinypic.com/2wojejb.png"
+                        icon: pinStyle
                     });
 
                     marker.addListener('click', function () {

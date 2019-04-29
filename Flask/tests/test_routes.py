@@ -90,21 +90,75 @@ class TestRoutes(TestCase):
                 assert sess[SessUserID] is None
                 assert sess[SessUserType] is None
 
-    # registration should save new user credentials if they do not exist
-    def test_registration_page(self):
-        self.routeActions.registerPage()
+    def test_registration_success_on_valid_creator_email(self):
+        email = 'testing123@kent.edu'
+        password = 'password'
+        role = 'creator'
+
+        result = self.routeActions.registerAction(email, password, role)
 
         self.assert_template_used("register.html")
-    
-    def test_registration(self):
-        email = 'testing123@gmail.com'
+        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_SUCCESS)
+
+    def test_registration_fail_on_duplicate_email(self):
+        email = 'testing123@kent.edu'
+        password = 'password'
+        role = 'All-powerful test user'
+
+        result  = self.routeActions.registerAction(email, password, role)
+
+        self.assert_template_used("register.html")
+        self.assert_context("registrationCheck", self.dbHelper.DUPLICATE_EMAIL_ERROR)
+
+    def test_registration_fail_on_invalid_email(self):
+        email = 'John Doe'
         password = 'password'
         role = 'All-powerful test user'
 
         result = self.routeActions.registerAction(email, password, role)
 
         self.assert_template_used("register.html")
-        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_SUCCESS)
+        self.assert_context("registrationCheck", self.dbHelper.INVALID_EMAIL_ERROR)
+
+    def test_registration_fail_on__email_empty(self):
+        email = None
+        password = 'password'
+        role = 'All-powerful test user'
+
+        result = self.routeActions.registerAction(email, password, role)
+
+        self.assert_template_used("register.html")
+        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_FIELDS_INCOMPLETE)
+
+    def test_registration_fail_on__password_empty(self):
+        email = 'testing123@example.com'
+        password = None
+        role = 'All-powerful test user'
+
+        result = self.routeActions.registerAction(email, password, role)
+
+        self.assert_template_used("register.html")
+        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_FIELDS_INCOMPLETE)
+
+    def test_registration_fail_on__role_empty(self):
+        email = 'testing@example.com'
+        password = 'password'
+        role = None
+
+        result = self.routeActions.registerAction(email, password, role)
+
+        self.assert_template_used("register.html")
+        self.assert_context("registrationCheck", self.dbHelper.REGISTRATION_FIELDS_INCOMPLETE)
+
+    def test_registration_fail_on_invalid_creator_email(self):
+        email = 'test@yahoo.com'
+        password = 'password'
+        role = 'creator'
+
+        result = self.routeActions.registerAction(email, password, role)
+
+        self.assert_template_used("register.html")
+        self.assert_context("registrationCheck", self.dbHelper.NOT_KENT_EMAIL_FOR_CREATOR)
 
     def test_creator_page_should_apply_all_events_to_template(self):
         event1 = EventDB()
