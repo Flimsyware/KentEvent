@@ -22,3 +22,14 @@ class TestRoutes(TestCase):
         result = self.routeActions.loginAction(email, password)
         
         self.assert_redirects(result, '/events')
+
+    # registration should save new user credentials if they do not exist
+    def test_registration(self):
+        email = 'testing123@gmail.com'
+        password = 'password'
+        role = 'All-powerful test user'
+        self.dbHelper.AddUser(UserDB(email, password, role))
+
+        result = self.routeActions.registerAction(email, password)
+
+        self.assert_redirects(result, '/events')
