@@ -182,7 +182,7 @@
         // Setting up event markers
         for (var i = 0; i < events.length; i++) {
             var event = events[i];
-            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description,event.PinStyle);
+            codeAddress(geocoder, map, event.Address, event.Name, event.Date, event.StartTime, event.EndTime, event.RoomNumber, event.Cost, event.Description, event.PinStyle);
         }
 
         // Center map on user's location
@@ -249,7 +249,7 @@
     }
 
     // Place marker at address
-    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description,pinStyle) {
+    function codeAddress(geocoder, map, address, name, date, startTime, endTime, roomNumber, cost, description, pinStyle) {
         if (pinStyle == null)
         {
             pinStyle = "http://i68.tinypic.com/2wojejb.png";
