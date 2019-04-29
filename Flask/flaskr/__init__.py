@@ -94,19 +94,21 @@ def create_app(test_config=None):
         if "logout" in request.form:
             return Logout()
 
-        event = EventDB()
-        event.name = request.form[EventDB.dbName]
-        event.description = request.form[EventDB.dbDescription]
-        event.address = request.form[EventDB.dbAddress]
-        event.creatorID = session[SessUserID]
-        event.startTime = request.form[EventDB.dbStartTime]
-        event.endTime = request.form[EventDB.dbEndTime]
-        event.date = request.form[EventDB.dbDate]
-        event.creationDate = datetime.datetime.now().strftime("%Y-%m-%d")
-        event.creationTime = datetime.datetime.now().strftime("%H:%M")
-        event.pinStyle = request.form[EventDB.dbPinStyle]
-        dbHelper.AddEvent(event)
-
+        try:
+            event = EventDB()
+            event.name = request.form[EventDB.dbName]
+            event.description = request.form[EventDB.dbDescription]
+            event.address = request.form[EventDB.dbAddress]
+            event.creatorID = session[SessUserID]
+            event.startTime = request.form[EventDB.dbStartTime]
+            event.endTime = request.form[EventDB.dbEndTime]
+            event.date = request.form[EventDB.dbDate]
+            event.creationDate = datetime.datetime.now().strftime("%Y-%m-%d")
+            event.creationTime = datetime.datetime.now().strftime("%H:%M")
+            event.pinStyle = request.form[EventDB.dbPinStyle]
+            dbHelper.AddEvent(event)
+        except Exception as e:
+            print(e)
         return Creator()
 
 
@@ -135,9 +137,7 @@ def create_app(test_config=None):
                 print("Admin")
                 return redirect("/events")
 
-        listOfEvents = dbHelper.getAllEvent()
-        return render_template("events.html", listOfEvents = listOfEvents)
-
+        return redirect("/user")
 
     @app.route('/logout')
     def Logout():
