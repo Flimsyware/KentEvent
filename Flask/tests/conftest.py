@@ -42,6 +42,11 @@ class RouteActions():
             '/'
         )
 
+    def flynnPage(self):
+        return self._client.get(
+            '/flynn'
+        )
+
     def loginPage(self):
         return self._client.get(
             '/login'
@@ -68,11 +73,22 @@ class RouteActions():
             }
         )
 
-    def creator(self):
+    def creatorPage(self):
         return self._client.get('/creator')
+
+    def creatorPost(self, event):
+        return self._client.post('/creator',
+            data = event
+        )
+
+    def creatorAction(self):
+        return self._client.post('/creator')
 
     def user(self):
         return self._client.get('/user')
 
     def events(self):
         return self._client.get('/events')
+
+    def logout(self):
+        return self._client.get('/logout')
