@@ -15,6 +15,16 @@ class TestRoutes(TestCase):
     def create_app(self):
         return getApp()
 
+    def test_landing_should_return_landing_template(self):
+        self.routeActions.landingPage()
+
+        self.assert_template_used("landing.html")
+
+    def test_login_page_should_return_login_template(self):
+        self.routeActions.loginPage()
+
+        self.assert_template_used("login.html")
+
     def test_login_should_redirect_on_successful_login(self):
         email = 'demoEmail@example.com'
         password = 'test password'
@@ -71,6 +81,11 @@ class TestRoutes(TestCase):
             assert SessUserType not in session
 
     # registration should save new user credentials if they do not exist
+    def test_registration_page(self):
+        self.routeActions.registerPage()
+
+        self.assert_template_used("register.html")
+    
     def test_registration(self):
         email = 'testing123@gmail.com'
         password = 'password'

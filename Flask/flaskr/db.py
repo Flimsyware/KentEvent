@@ -23,7 +23,6 @@ class _DBHelper:
         )
         self.c = self.conn.cursor()
         self.__CreateTablesIfNotExists__()
-        self.__DatabaseTestingFunction__()
 
     def __CreateTablesIfNotExists__(self):
         self.c.execute(CreateUniversityTableText)
@@ -31,47 +30,6 @@ class _DBHelper:
         self.c.execute(CreateEventTableText)
         self.conn.commit()
 
-    def __AddTestableInformationToDatabase__(self):
-        self.AddUser(UserDB("TestEmail1@kent.edu","TestPassword1",UserDB.dbRoleUser))
-        self.AddUser(UserDB("TestEmail2@kent.edu","TestPassword2",UserDB.dbRoleUser))
-        self.AddUser(UserDB("TestEmail3@kent.edu","TestPassword3",UserDB.dbRoleUser))
-        self.AddUser(UserDB("TestEmail4@kent.edu","TestPassword4",UserDB.dbRoleHost))
-        self.AddUser(UserDB("TestEmail5@kent.edu","TestPassword5",UserDB.dbRoleHost))
-        self.AddUser(UserDB("TestEmail6@kent.edu","TestPassword6",UserDB.dbRoleHost))
-
-        if(len(self.getAllEvent()) == 0):
-            event1 = EventDB()
-            event1.ID = 1
-            event1.name = "event1"
-            event1.creatorID = session[SessUserID]
-            event1.description = "This is test event 1"
-            event1.startTime = "5:00"
-            event1.endTime = "10:00"
-            event1.date = "4/28/19"
-            event1.address = "kent state student center"
-            event1.creationDate = "now"
-            event1.creationTime = "now" 
-            event1.roomNumber = 1
-            event1.cost = "free"
-            event2 = EventDB()
-            event2.ID = 2
-            event2.name = "event2"
-            event2.description = "This is test event 2"
-            event2.creatorID = session[SessUserID]
-            event2.startTime = "1:00"
-            event2.endTime = "3:30"
-            event2.date = "4/28/19"
-            event2.address = "bowman hall"
-            event2.creationDate = "now"
-            event2.creationTime = "now"
-            event2.roomNumber = 217
-            event2.cost = "$5.00"
-
-            self.AddEvent(event1)
-            self.AddEvent(event2)
-
-        
-    
     #The only parameters that should be dynamic are the whereValues. everything else should come from class variables
     def __SelectQuery__(self, selectArray, tableName, whereTypes, whereValues):
         selectText = "Select "
@@ -205,12 +163,6 @@ class _DBHelper:
 
     def close_db(self):
         self.conn.close()
-
-    def __DatabaseTestingFunction__(self):
-        print("Debugging and testing function goes here")
-
-
-        print("Testing successful")
 
 _cachedHelper = None
 
